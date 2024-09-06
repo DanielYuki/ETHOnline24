@@ -41,7 +41,7 @@ const addMetaTags = (client: string, version?: string) => {
 const xmtpSupport = async (c: Context, next: Next) => {
   // Check if the request is a POST and relevant for XMTP processing
   if (c.req.method === "POST") {
-    const requestBody = (await c.req.json().catch(() => {})) || {};
+    const requestBody = (await c.req.json().catch(() => { })) || {};
     if (requestBody?.clientProtocol?.includes("xmtp")) {
       c.set("client", "xmtp");
       const { verifiedWalletAddress } = await validateFramesPost(requestBody);
@@ -139,7 +139,7 @@ app.frame('/pokemons/:position/:index', async (c) => {
   let position = Number(c.req.param('position'));
   const index = Number(c.req.param('index'));
 
-  if(Number(buttonValue)) {
+  if (Number(buttonValue)) {
     c.deriveState((prevState: any) => {
       prevState.joinableBattleId = Number(buttonValue);
       prevState.isMaker = false;
@@ -148,8 +148,8 @@ app.frame('/pokemons/:position/:index', async (c) => {
 
   const selectedPokemons = c.previousState?.selectedPokemons || [];
   const playerPokemons = await getPokemonsByPlayerId(fid!, selectedPokemons);
-  
-  if(buttonValue === 'confirm') {
+
+  if (buttonValue === 'confirm') {
     const isMaker = c.previousState?.isMaker!;
     const joinableBattleId = c.previousState?.joinableBattleId!;
     const lastSelectedPokemon = c.previousState?.lastSelectedPokemon!;
@@ -164,7 +164,7 @@ app.frame('/pokemons/:position/:index', async (c) => {
     console.log(playerPokemons)
     console.log(selectedPokemons)
 
-    if(index == 3) {
+    if (index == 3) {
       return c.res({
         title,
         image: `/image/checkout/${selectedPokemons[0]}/${selectedPokemons[1]}/${selectedPokemons[2]}`,
@@ -199,7 +199,7 @@ app.frame('/pokemons/:position/:index', async (c) => {
     intents: [
       <Button action={`/pokemons/${boundIndex(position - 1, totalPlayerPokemons)}/${index}`}>⬅️</Button>,
       <Button action={`/pokemons/${boundIndex(position + 1, totalPlayerPokemons)}/${index}`}>➡️</Button>,
-      <Button value='confirm' action={`/pokemons/0/${index+1}`}>✅</Button>,
+      <Button value='confirm' action={`/pokemons/0/${index + 1}`}>✅</Button>,
       <Button action={`/battle`}>↩️</Button>,
     ],
   })
@@ -207,9 +207,9 @@ app.frame('/pokemons/:position/:index', async (c) => {
 
 app.frame('/battle/handle', async (c) => {
   const txId = c.transactionId ? c.transactionId : '0x';
-  let currentTx : `0x${string}` = '0x';
+  let currentTx: `0x${string}` = '0x';
 
-  if(txId !== '0x') {
+  if (txId !== '0x') {
     c.deriveState((prevState: any) => {
       prevState.currentTxId = txId;
       currentTx = txId;
@@ -218,25 +218,25 @@ app.frame('/battle/handle', async (c) => {
     currentTx = c.previousState?.currentTxId!;
   }
 
-  if(currentTx !== '0x') {
+  if (currentTx !== '0x') {
     try {
-      const transactionReceipt = await publicClient.getTransactionReceipt({hash: currentTx});
+      const transactionReceipt = await publicClient.getTransactionReceipt({ hash: currentTx });
 
       console.log(transactionReceipt);
 
-      if(transactionReceipt && transactionReceipt.status == 'reverted') {
+      if (transactionReceipt && transactionReceipt.status == 'reverted') {
         return c.error({ message: 'Transaction failed' });
       }
 
-      if(!c.previousState?.selectedPokemons) {
+      if (!c.previousState?.selectedPokemons) {
         return c.error({ message: 'No pokemons selected' });
       }
 
-      if(c.previousState?.selectedPokemons.length < 3) {
+      if (c.previousState?.selectedPokemons.length < 3) {
         return c.error({ message: 'Not enough pokemons selected' });
       }
 
-      if(transactionReceipt?.status === 'success') {
+      if (transactionReceipt?.status === 'success') {
         return c.res({
           title,
           image: `/go!.png`,
@@ -267,7 +267,7 @@ app.frame('/finish-battle-create', async (c) => {
 
   const newBattleId = await createBattle(fid!, c.previousState.selectedPokemons!);
 
-  if(newBattleId === 'Already creating battle') {
+  if (newBattleId === 'Already creating battle') {
     return c.res({
       title,
       image: '/loading.gif',
@@ -278,7 +278,7 @@ app.frame('/finish-battle-create', async (c) => {
     })
   }
 
-  if(newBattleId === 'Failed to create battle') {
+  if (newBattleId === 'Failed to create battle') {
     return c.error({ message: 'Failed to create battle' });
   }
 
@@ -300,9 +300,9 @@ app.frame('/finish-battle-create', async (c) => {
 app.frame('/battle/:gameId/join', async (c) => {
   const gameId = Number(c.req.param('gameId'));
   const txId = c.transactionId ? c.transactionId : '0x';
-  let currentTx : `0x${string}` = '0x';
+  let currentTx: `0x${string}` = '0x';
 
-  if(txId !== '0x') {
+  if (txId !== '0x') {
     c.deriveState((prevState: any) => {
       prevState.currentTxId = txId;
       currentTx = txId;
@@ -311,25 +311,25 @@ app.frame('/battle/:gameId/join', async (c) => {
     currentTx = c.previousState?.currentTxId!;
   }
 
-  if(currentTx !== '0x') {
+  if (currentTx !== '0x') {
     try {
-      const transactionReceipt = await publicClient.getTransactionReceipt({hash: currentTx});
+      const transactionReceipt = await publicClient.getTransactionReceipt({ hash: currentTx });
 
       console.log(transactionReceipt);
 
-      if(transactionReceipt && transactionReceipt.status == 'reverted') {
+      if (transactionReceipt && transactionReceipt.status == 'reverted') {
         return c.error({ message: 'Transaction failed' });
       }
 
-      if(!c.previousState?.selectedPokemons) {
+      if (!c.previousState?.selectedPokemons) {
         return c.error({ message: 'No pokemons selected' });
       }
 
-      if(c.previousState?.selectedPokemons.length < 3) {
+      if (c.previousState?.selectedPokemons.length < 3) {
         return c.error({ message: 'Not enough pokemons selected' });
       }
 
-      if(transactionReceipt?.status === 'success') {
+      if (transactionReceipt?.status === 'success') {
         return c.res({
           title,
           image: `/go!.png`,
@@ -360,9 +360,9 @@ app.frame('/finish-battle-join', async (c) => {
   const gameId = Number(buttonValue);
 
   const message = await joinBattle(gameId, fid!, c.previousState.selectedPokemons!);
-  await setSelectedPokemons(gameId, fid!, [0,1]);
+  await setSelectedPokemons(gameId, fid!, [0, 1]);
 
-  if(message === 'Already joining battle') {
+  if (message === 'Already joining battle') {
     return c.res({
       title,
       image: '/loading.gif',
@@ -373,7 +373,7 @@ app.frame('/finish-battle-join', async (c) => {
     })
   }
 
-  if(message === 'Failed to join battle') {
+  if (message === 'Failed to join battle') {
     return c.error({ message: 'Failed to join battle' });
   }
 
@@ -406,15 +406,15 @@ app.frame('/battle/:gameId', async (c) => {
     c.deriveState((prevState: any) => {
       prevState.verifiedAddresses = verifiedAddresses;
     });
-  } 
+  }
 
   const gameId = Number(c.req.param('gameId'));
   const battle = await getBattleById(gameId);
 
   console.log(battle);
-  
+
   const battleStatus = battle.status;
-  
+
   if (battleStatus === "waiting") {
     return c.res({
       title,
@@ -425,7 +425,7 @@ app.frame('/battle/:gameId', async (c) => {
       ]
     });
   }
-  
+
   c.deriveState((prevState: any) => {
     prevState.hasMoved = false;
   });
@@ -444,7 +444,7 @@ app.frame('/battle/:gameId', async (c) => {
 
 app.frame('/battle/share/:gameId', async (c) => {
   const gameId = c.req.param('gameId');
-  
+
   return c.res({
     title,
     image: '/p2-pokemons.png',
@@ -458,15 +458,15 @@ app.frame('/battle/share/:gameId', async (c) => {
 app.frame('/battle/:gameId/checkout', async (c) => {
   const { frameData } = c;
   const fid = frameData?.fid;
-  
+
   const gameId = Number(c.req.param('gameId'));
-  const battle : any = await getBattleById(gameId);
+  const battle: any = await getBattleById(gameId);
 
   const role = verifyMakerOrTaker(fid!, battle);
   console.log(role);
   const winner = battle.battle_log[battle.battle_log.length - 1].split(' ')[0];
 
-  if(winner === role) {
+  if (winner === role) {
     return c.res({
       title,
       image: '/winner.png',
@@ -528,11 +528,11 @@ app.frame('/battle/:gameId/waiting/:value', async (c) => {
   const gameId = Number(c.req.param('gameId'));
   const value = Number(c.req.param('value'));
 
-  if(!hasMoved) {
-    const battle : any = await getBattleById(gameId)
+  if (!hasMoved) {
+    const battle: any = await getBattleById(gameId)
     const { player } = getPlayers(fid!, battle);
-    await makeMove(gameId, fid!, player.currentPokemon.moves[value-1]);
-  
+    await makeMove(gameId, fid!, player.currentPokemon.moves[value - 1]);
+
     c.deriveState((prevState: any) => {
       prevState.hasMoved = true;
     });
@@ -540,7 +540,7 @@ app.frame('/battle/:gameId/waiting/:value', async (c) => {
 
   const updatedBattle = await getBattleById(gameId);
 
-  if(updatedBattle.status === 'ended') {
+  if (updatedBattle.status === 'ended') {
     return c.res({
       title,
       image: '/winner.png',
@@ -551,7 +551,7 @@ app.frame('/battle/:gameId/waiting/:value', async (c) => {
     })
   }
 
-  if(updatedBattle.maker_move == null && updatedBattle.taker_move == null) {
+  if (updatedBattle.maker_move == null && updatedBattle.taker_move == null) {
     return c.res({
       title,
       image: '/waiting-for-p2.png',
@@ -611,7 +611,7 @@ app.frame('/pokedex/:position', async (c) => {
 
   const playerPokemons = await getPokemonsByPlayerId(fid!);
   const totalPlayerPokemons = playerPokemons.length;
-  
+
   const position = Number(c.req.param('position')) || 0;
 
   const pokemonId = playerPokemons[position];
@@ -645,9 +645,9 @@ app.frame('/new', (c) => {
 
 app.frame('/loading', async (c) => {
   const txId = c.transactionId ? c.transactionId : '0x';
-  let currentTx : `0x${string}` = '0x';
+  let currentTx: `0x${string}` = '0x';
 
-  if(txId !== '0x') {
+  if (txId !== '0x') {
     c.deriveState((prevState: any) => {
       prevState.currentTxId = txId;
       currentTx = txId;
@@ -706,8 +706,8 @@ app.frame('/finish-mint', async (c) => {
   console.log(currentTx);
 
   const pokemonId = await assignPokemonToUser(fid!, currentTx as `0x${string}`);
-  
-  if(pokemonId == 0) {
+
+  if (pokemonId == 0) {
     return c.res({
       title,
       image: '/pokeball.gif',
@@ -761,7 +761,7 @@ app.transaction('/join-battle', (c) => {
 
 app.frame('/gotcha/:pokemonId', async (c) => {
   let pokemonId = Number(c.req.param('pokemonId'));
-  if(!pokemonId) {
+  if (!pokemonId) {
     console.log("Failed getting pokemon... trying to get the last pokemon");
     const playerPokemons = await getPokemonsByPlayerId(c.frameData?.fid!);
     pokemonId = playerPokemons[playerPokemons.length - 1];
@@ -803,20 +803,20 @@ app.frame('/test', (c) => {
 })
 
 app.hono.get('/image/vs/:gameId/user/:userFid', async (c) => {
-  const battle : any = await getBattleById(Number(c.req.param('gameId')));
+  const battle: any = await getBattleById(Number(c.req.param('gameId')));
 
   const { player, opponent } = getPlayers(Number(c.req.param('userFid')), battle);
   // console.log(player)
   try {
     const image = await generateGame(
-      player.currentPokemon.name.toString(), 
-      player.currentPokemon.id, 
-      opponent.currentPokemon.name.toLowerCase(), 
-      opponent.currentPokemon.id, 
-      player.currentPokemon.hp, 
-      player.currentPokemon.status.currentHP, 
-      opponent.currentPokemon.hp, 
-      opponent.currentPokemon.status.currentHP, 
+      player.currentPokemon.name.toString(),
+      player.currentPokemon.id,
+      opponent.currentPokemon.name.toLowerCase(),
+      opponent.currentPokemon.id,
+      player.currentPokemon.hp,
+      player.currentPokemon.status.currentHP,
+      opponent.currentPokemon.hp,
+      opponent.currentPokemon.status.currentHP,
     );
 
     return c.newResponse(image, 200, {
@@ -832,31 +832,31 @@ app.hono.get('/image/vs/:gameId/user/:userFid', async (c) => {
 app.hono.get('/image/pokemenu/:gameId/user/:userFid', async (c) => {
   try {
     const userFid = Number(c.req.param('userFid'));
-    const battle : any = await getBattleById(Number(c.req.param('gameId')));
+    const battle: any = await getBattleById(Number(c.req.param('gameId')));
     const { player } = getPlayers(userFid, battle)
 
     const currentPokemon = player.currentPokemon;
 
     console.log(currentPokemon.moveDetails);
 
-    let attacks : any = [];
+    let attacks: any = [];
 
     currentPokemon.moveDetails.forEach((move: any) => {
-      attacks.push({atk: move.name, type: {name: move.type, color: getPokemonTypeColor(move.type)}});
+      attacks.push({ atk: move.name, type: { name: move.type, color: getPokemonTypeColor(move.type) } });
     })
 
     console.log(attacks);
 
     // const attacks = [{atk: 'Tackle', type: {name:'normal', color:'919191'}}, {atk: 'Thunderbolt', type: {name:'electric', color:'FFE500'}}, {atk: 'Light', type: {name:'normal', color:'000000'}}] as Attack[];
     const image = await generatePokemonMenu(
-      player.currentPokemon.name, 
-      player.currentPokemon.id, 
-      player.secondaryPokemon.name, 
-      player.secondaryPokemon.id, 
-      player.currentPokemon.hp, 
-      player.currentPokemon.status.currentHP, 
-      player.secondaryPokemon.hp, 
-      player.secondaryPokemon.status.currentHP, 
+      player.currentPokemon.name,
+      player.currentPokemon.id,
+      player.secondaryPokemon.name,
+      player.secondaryPokemon.id,
+      player.currentPokemon.hp,
+      player.currentPokemon.status.currentHP,
+      player.secondaryPokemon.hp,
+      player.secondaryPokemon.status.currentHP,
       attacks
     );
 
@@ -888,8 +888,9 @@ app.hono.get('/image/pokemon/:id/:name', async (c) => {
 
 app.hono.get('/image/waiting/:pfp_url', async (c) => {
   try {
-    const pfp_url = c.req.param('pfp_url');
-    const image = await generateWaitingRoom(pfp_url);
+    // const pfp_url = c.req.param('pfp_url');
+    // const image = await generateWaitingRoom(pfp_url); implement this later
+    const image = await generateWaitingRoom();
     return c.newResponse(image, 200, {
       'Content-Type': 'image/png',
       'Cache-Control': 'max-age=0', //try no-cache later
@@ -905,7 +906,7 @@ app.hono.get('/image/checkout/:p1/:p2/:p3', async (c) => {
     const p1 = Number(c.req.param('p1'));
     const p2 = Number(c.req.param('p2'));
     const p3 = Number(c.req.param('p3'));
-    const pokemonIds = [p1,p2,p3];
+    const pokemonIds = [p1, p2, p3];
     const image = await generateBattleConfirm(pokemonIds);
     return c.newResponse(image, 200, {
       'Content-Type': 'image/png',
@@ -920,22 +921,23 @@ app.hono.get('/image/checkout/:p1/:p2/:p3', async (c) => {
 app.hono.get('/image/fight/:gameId/user/:userFid', async (c) => {
   try {
     const gameId = Number(c.req.param('gameId'));
-    const battle : any = await getBattleById(gameId);
+    const battle: any = await getBattleById(gameId);
     const { player } = getPlayers(Number(c.req.param('userFid')), battle);
 
-    let attacks : any = [];
-    
-    player.currentPokemon.moveDetails.forEach((move : any) => {
-      attacks.push({atk: move.name, type: {name: move.type, color: getPokemonTypeColor(move.type)}});
+    let attacks: any = [];
+
+    player.currentPokemon.moveDetails.forEach((move: any) => {
+      attacks.push({ atk: move.name, type: { name: move.type, color: getPokemonTypeColor(move.type) } });
     })
 
-    const status = {
-      atk: player.currentPokemon.attack,
-      def: player.currentPokemon.defense,
-      spd: player.currentPokemon.speed,
-    }
+    // const status = {
+    //   atk: player.currentPokemon.attack,
+    //   def: player.currentPokemon.defense,
+    //   spd: player.currentPokemon.speed,
+    // }
 
-    const image = await generateFight(player.currentPokemon.name, player.currentPokemon.id, player.currentPokemon.hp, player.currentPokemon.status.currentHP, attacks, status)
+    // const image = await generateFight(player.currentPokemon.name, player.currentPokemon.id, player.currentPokemon.hp, player.currentPokemon.status.currentHP, attacks, status)  implement this later
+    const image = await generateFight(player.currentPokemon.name, player.currentPokemon.id, player.currentPokemon.hp, player.currentPokemon.status.currentHP, attacks)
 
     return c.newResponse(image, 200, {
       'Content-Type': 'image/png',
