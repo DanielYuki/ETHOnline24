@@ -73,7 +73,7 @@ export const generateFight = async (
     totalHp: number,
     currentHp: number,
     attacks: Attack [],
-    stats: any
+    // stats: any
   ) => {
     try {
       const fightComponents = (() => {
@@ -187,7 +187,7 @@ export const generateBattleConfirm = async (
 }
 
 export const generateWaitingRoom = async (
-  pfp_url: string,
+  // pfp_url: string,
 ) => {
   try {
   const ComponentsArray = [];
