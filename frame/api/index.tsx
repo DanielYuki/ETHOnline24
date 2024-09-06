@@ -5,7 +5,7 @@ import { publicClient } from '../lib/contracts.js';
 import { devtools } from 'frog/dev';
 import { handle } from 'frog/vercel';
 import { serve } from '@hono/node-server';
-// import { BACKEND_URL } from '../constant/config.js';
+import { CHAIN_ID, CONTRACT_ADDRESS } from '../constant/config.js';
 import { assignPokemonToUser, createBattle, getBattleById, getPokemonName, getPokemonsByPlayerId, joinBattle, setSelectedPokemons, makeMove } from '../lib/database.js';
 import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title } from '../constant/config.js';
 import { boundIndex } from '../lib/utils/boundIndex.js';
@@ -735,8 +735,8 @@ app.frame('/finish-mint', async (c) => {
 app.transaction('/mint', (c) => {
   const mintCost = '0.000777';
   return c.send({
-    chainId: 'eip155:11155111',
-    to: '0x02f37D3C000Fb5D2A824a3dc3f1a29fa5530A8D4',
+    chainId: CHAIN_ID,
+    to: CONTRACT_ADDRESS,
     value: parseEther(mintCost as string),
   })
 })
@@ -744,8 +744,8 @@ app.transaction('/mint', (c) => {
 app.transaction('/create-battle', (c) => {
   const cost = '0.000777';
   return c.send({
-    chainId: 'eip155:11155111',
-    to: '0x02f37D3C000Fb5D2A824a3dc3f1a29fa5530A8D4',
+    chainId: CHAIN_ID,
+    to: CONTRACT_ADDRESS,
     value: parseEther(cost as string),
   })
 })
@@ -753,8 +753,8 @@ app.transaction('/create-battle', (c) => {
 app.transaction('/join-battle', (c) => {
   const cost = '0.000777';
   return c.send({
-    chainId: 'eip155:11155111',
-    to: '0x02f37D3C000Fb5D2A824a3dc3f1a29fa5530A8D4',
+    chainId: CHAIN_ID,
+    to: CONTRACT_ADDRESS,
     value: parseEther(cost as string),
   })
 })
