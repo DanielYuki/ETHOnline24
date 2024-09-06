@@ -1,8 +1,4 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY || "NEYNAR_API_DOCS" as string;
+import { NEYNAR_API_KEY } from "../constant/config";
 
 export const getFarcasterUserInfo = async (fid?: number) => {
   const response = await fetch(
