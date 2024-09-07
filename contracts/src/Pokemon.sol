@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2Plus.sol";
 import "./PokemonSource.sol";
 
 contract Pokemon is ERC721, VRFConsumerBaseV2Plus {
@@ -16,6 +17,7 @@ contract Pokemon is ERC721, VRFConsumerBaseV2Plus {
     mapping(uint256 => uint256) public pokemonToSpeed;
 
 
+    // CHAINLINK STUFF 
     event RequestSent(uint256 requestId, uint32 numWords);
     event RequestFulfilled(uint256 requestId, uint256[] randomWords);
 
@@ -60,12 +62,31 @@ contract Pokemon is ERC721, VRFConsumerBaseV2Plus {
      * COORDINATOR: 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B
      */
 
-    constructor(address _pokemonSource) ERC721("Pokemon", "PK") {
+
+
+
+    constructor(address _pokemonSource, address _coordinator) ERC721("Pokemon", "PK") VRFConsumerBaseV2Plus(_coordinator){
         pokemonSource = PokemonSource(_pokemonSource);
     }
 
 
-    function requestPokemon() public payable returns (uint256 requestId)
+    function requestPokemon() public payable returns (uint256 requestId) {
+        // Will revert if subscription is not set and funded.
+        requestId = s_vrfCoordinator.requestRandomWords(
+            VRFV2PlusClient.RandomWordsRequest({
+                keyHash: keyHash,
+                subId: s_subscriptionId,
+                requestConfirmations: requestConfirmations,
+                callbackGasLimit: callbackGasLimit,
+                numWords: numWords,
+                extraArgs: VRFV2PlusClient._argsToBytes(
+                    VRFV2PlusClient.ExtraArgsV1({
+                        nativePayment: enableNativePayment
+                    })
+                )
+            })
+        );
+    }
 
 
 
