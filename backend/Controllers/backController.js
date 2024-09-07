@@ -274,17 +274,22 @@ export const makeMove = async (req, res) => {
 }
 
 export const registerBattleLog = async (battle) => {
+  console.log('registering battle log...');
   try {
-    db.run('INSERT INTO battle_logs (battle_id, log) VALUES (?, ?)', [battle.id, JSON.stringify(battle.battleLog)], (err) => {
-      if (err) {
-        console.error(err);
+    db.run('INSERT INTO battle_logs (battle_id, log) VALUES (?, ?)', 
+      [battle.id, JSON.stringify(battle.battle_log)], 
+      (err) => {
+        if (err) {
+          console.error("Error while inserting battle log: ", err);
+        } else {
+          console.log('Battle log successfully registered');
+        }
       }
-    });
-
+    );
   } catch (error) {
-    console.error(error);
+    console.error("Exception caught: ", error);
   }
-}
+};
 
 export const getPokemonById = async (req, res) => {
   const { id } = req.params;

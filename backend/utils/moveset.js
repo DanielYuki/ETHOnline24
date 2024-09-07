@@ -377,4 +377,13 @@ export const moveset = [
       const damageDealt = this.dealDamage(agent, battle, attacker, defender);
       this.selfDamage(attacker, damageDealt, battle, 0.33);
     }),
+    new Move(101, 'AccTest', 'Normal', 10, 0, 'testing accuracy', function(agent, battle, attacker, defender) {
+      this.dealDamage(agent, battle, attacker, defender);
+    }),
+    new Move(102, 'multiTest', 'Normal', 10, 100, 'testing multi-hit moves', function(agent, battle, attacker, defender) {
+      this.multiHitDamage(agent, battle, attacker, defender, 2, 10);
+    }),
+    new Move(103, 'healTest', 'Normal', 10, 100, 'testing healing moves', function(agent, battle, attacker, defender) {
+      this.healMove(attacker, attacker.hp, battle);
+    }),
 ];

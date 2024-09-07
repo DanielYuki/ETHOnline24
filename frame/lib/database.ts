@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "../config";
+import { BACKEND_URL } from "../config.js";
 import { Battle } from "../types/types";
 
 export const getBattleById = async (id: number) => {
@@ -53,7 +53,7 @@ export const getPokemonsByPlayerId = async (senderId: number, selectedPokemons: 
     }
   });
 
-  return inventory; // { "inventory": [ 25, 25, 1, 10 ] }
+  return inventory;
 }
 
 export const getPokemonName = async (pokemonId : number) => {

@@ -1,17 +1,4 @@
-type Battle = {
-  id: string;
-  maker: number;
-  taker: number;
-  maker_pokemons: any;
-  maker_battling_pokemons: any;
-  taker_pokemons: any;
-  taker_battling_pokemons: any;
-  maker_move: string;
-  taker_move: string;
-  status: string;
-  current_turn: number;
-  battle_log: string[]; 
-}
+import { Battle } from "../../types/types";
 
 export const getPlayers = (userFid: number, battle: Battle) => {
   let player, opponent;
