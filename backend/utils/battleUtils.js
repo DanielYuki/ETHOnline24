@@ -2,7 +2,6 @@ import db from "../database.js";
 import Battle from "../Models/Battle.js";
 import { effectsStack, EndEffect, StartEffect } from "./moves.js";
 import { moveset } from "./moveset.js";
-import { typeMatchup } from "./typeMatchup.js";
 
 export const getBattleFromDb = async (battleId) => {
   return new Promise((resolve, reject) => {
@@ -55,17 +54,6 @@ export const updateMove = (battle, userId, move) => {
     battle.maker_move = move;
   } else {
     battle.taker_move = move;
-  }
-}
-
-export const processMove = (battle, attacker, move, defender) => {
-  const damage = calculateDamage(attacker, move, defender);
-  defender.hp -= damage;
-
-  battle.battle_log.push(createBattleLog(attacker, move, defender, damage));
-
-  if (defender.hp <= 0) {
-    battle.battle_log.push({ message: `${defender.name} fainted!` });
   }
 }
 
@@ -156,14 +144,6 @@ export const updateBattleInDatabase = async (battle) => {
   });
 }
 
-// rever a logica de dano
-export const calculateDamage = (attacker, move, defender) => {
-  const modifier = typeMatchup[move.type][defender.type];
-  const damage = Math.floor(0.5 * attacker.attack * (move.power / defender.defense) * modifier);
-
-  return damage;
-}
-
 const isSwapMove = (move) => {
   return moveset[move].id == 0;
 }
@@ -202,6 +182,7 @@ const notifyFaintedPokemon = (target, battle) => {
   }
 }
 
+// main function to perform the battle itself
 export const performBattle = (battle) => {
 
   effectsStack.map(effect => {
