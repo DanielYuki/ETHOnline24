@@ -78,6 +78,17 @@ export const pokemonsByPlayerId = async (req, res) => {
   });
 }
 
+export const getBattleIdByStatus = async (req, res) => {
+  const { status } = req.params;
+  db.get('SELECT * FROM battles WHERE status = ?', [status], (err, col) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error getting ids', error: err.message });
+    }
+    const battles = col.id;
+    res.status(200).json({battles});
+  })
+}
+
 export const createBattle = async (req, res) => {
   try {
     const { maker, maker_pokemons } = req.body;

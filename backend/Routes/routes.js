@@ -14,5 +14,6 @@ router.get('/user/:id/pokemons', pokemonsByPlayerId);
 router.get('/send', sendTransaction);
 router.get('/pokemon/:id', getPokemonById);
 router.get('/pokemon/:id/name', getPokemonName);
+router.get('/get/:status', getBattleIdByStatus);
 
 export default router;
