@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "../constant/config";
+import { BACKEND_URL } from "../config";
 import { Battle } from "../types/types";
 
 export const getBattleById = async (id: number) => {
