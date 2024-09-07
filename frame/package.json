@@ -17,6 +17,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.5.0",
-    "typescript": "latest"
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
+    "typescript": "latest",
+    "vite-tsconfig-paths": "^5.0.1"
   }
 }
