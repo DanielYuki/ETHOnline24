@@ -1,18 +1,18 @@
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Button, Frog, parseEther } from 'frog';
-import { getFarcasterUserInfo } from '@lib/neynar.js';
-import { publicClient } from '@lib/contracts.js';
+import { getFarcasterUserInfo } from '../lib/neynar.js';
+import { publicClient } from '../lib/contracts.js';
 import { devtools } from 'frog/dev';
 import { handle } from 'frog/vercel';
 import { serve } from '@hono/node-server';
-import { assignPokemonToUser, createBattle, getBattleById, getPokemonName, getPokemonsByPlayerId, joinBattle, setSelectedPokemons, makeMove } from '@lib/database.js';
+import { assignPokemonToUser, createBattle, getBattleById, getPokemonName, getPokemonsByPlayerId, joinBattle, setSelectedPokemons, makeMove } from '../lib/database.js';
 import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, CHAIN_ID, CONTRACT_ADDRESS } from '../config.js';
-import { boundIndex } from '@utils/boundIndex.js';
-import { generateGame, generateFight, generateBattleConfirm, generateWaitingRoom, generatePokemonCard, generatePokemonMenu } from '@image-generation/generators.js';
-import { getPlayers, verifyMakerOrTaker } from '@utils/battleUtils.js';
+import { boundIndex } from '../lib/utils/boundIndex.js';
+import { generateGame, generateFight, generateBattleConfirm, generateWaitingRoom, generatePokemonCard, generatePokemonMenu } from '../image-generation/generators.js';
+import { getPlayers, verifyMakerOrTaker } from '../lib/utils/battleUtils.js';
 import { validateFramesPost } from '@xmtp/frames-validator';
 import { Context, Next } from 'hono';
-import { getPokemonTypeColor } from '@image-generation/pkmTypeColor.js';
+import { getPokemonTypeColor } from '../image-generation/pkmTypeColor.js';
 
 type State = {
   verifiedAddresses?: `0x${string}`[];
