@@ -122,6 +122,22 @@ export const joinBattle = async (battleId: number, taker: number, taker_pokemons
   }
 }
 
+export const forfeitBattle = async (battleId: number, userFid: number) => {
+  const response = await fetch(`${BACKEND_URL}/forfeit-battle`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ battleId, userFid })
+  })
+
+  if(response.ok) {
+    return "Forfeited battle";
+  } else {
+    return "Failed to forfeit battle";
+  }
+}
+
 export const setSelectedPokemons = async (battleId: number, userFid: number, selectedPokemons: number[]) => {
   const response = await fetch(`${BACKEND_URL}/select-pokemons`, {
     method: 'POST',
