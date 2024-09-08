@@ -37,8 +37,8 @@ export const generateGame = async (
   
         return components;
       })
-      const baseImageBuffer = await sharp('./public/battle-scenes/1.png')
-      .resize(630, 379)
+      const bg = Math.ceil(Math.random()*6);
+      const baseImageBuffer = await sharp(`./public/battle-scenes/${bg}.png`)
       .png()
       .toBuffer();
 
@@ -50,7 +50,7 @@ export const generateGame = async (
       const gameComponentsArray = gameComponents();
   
       const pokemon1ImageBuffer = await sharp(`./public/pokemons/back/${pokemon1Id}.png`) //show back of the pokemon
-        .resize(200, 200)
+        .resize(280, 280)
         .png()
         .toBuffer();
   
@@ -60,7 +60,7 @@ export const generateGame = async (
         .toBuffer();
   
       const hphp = hpHp(currentHp1, totalHP1);
-      gameComponentsArray.push({ input: pokemon1ImageBuffer, top: 151, left: 77 });
+      gameComponentsArray.push({ input: pokemon1ImageBuffer, top: 100, left: 55 });
       gameComponentsArray.push({ input: pokemon2ImageBuffer, top: 30, left: 400 });
       gameComponentsArray.push({ input: Buffer.from(hphp), top: 295, left: 553 });
       const battleBg = [];

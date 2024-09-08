@@ -805,9 +805,9 @@ app.hono.get('/image/vs/test', async (c) => {
   try {
     const image = await generateGame(
       'charizard',
-      6,
-      'pikachu',
       25,
+      'pikachu',
+      6,
       70,
       70,
       60,
