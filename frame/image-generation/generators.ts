@@ -2,7 +2,7 @@ import sharp from "sharp";
 import { Attack } from "../types/types.js";
 
 import { attackType, hpHp, hpSVG, moves, moves2, pokemonSVG, statsBox1, statsBox2, statusPokemon, typeBox, typeBox2 } from "./functions.js";
-import { getPokemonTypeColor } from "./pkmTypeColor";
+import { getPokemonTypeColor } from "./pkmTypeColor.js";
 
 export const generateGame = async (
     pokemon1Name: string,
