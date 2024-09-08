@@ -3,7 +3,7 @@ import { Attack } from "../types/types";
 export const moves = (attackName: string) => {
     return `
 			<svg width="220" height="65">
-				<text x="0" y="25" text-anchor="left" font-family="Handjet" font-size="27" fill="white">${attackName}</text>
+				<text x="0" y="25" text-anchor="left" font-size="27" fill="white">${attackName}</text>
 			</svg>
 		`;
 };
@@ -11,7 +11,7 @@ export const moves = (attackName: string) => {
 export const moves2 = (attackName: string) => {
     return `
 			<svg width="220" height="65">
-				<text x="0" y="25" text-anchor="left" font-family="Handjet" font-size="22" fill="white">${attackName}</text>
+				<text x="0" y="25" text-anchor="left" font-size="22" fill="white">${attackName}</text>
 			</svg>
 		`;
 };
@@ -54,7 +54,7 @@ export const typeBox2 = (attackType: Attack) => {
 export const attackType = (attackType: Attack) => {
     return `
         <svg width="400" height="40">
-            <text x="50" y="25" text-anchor="middle" font-family="Handjet" font-weight="bold" font-size="20" fill="white">${attackType.type.name.toUpperCase()}</text>
+            <text x="50" y="25" text-anchor="middle" font-weight="bold" font-size="20" fill="white">${attackType.type.name.toUpperCase()}</text>
         </svg>
         `;
 };
@@ -62,7 +62,7 @@ export const attackType = (attackType: Attack) => {
 export const statusPokemon = (statusPoints: string) => {
     return `
            <svg width="100" height="45">
-            <text x="0" y="20" text-anchor="left" font-family="Handjet" font-size="20" fill="white">+${statusPoints}</text>
+            <text x="0" y="20" text-anchor="left" font-size="20" fill="white">+${statusPoints}</text>
            </svg>       
 
         `;
@@ -99,7 +99,7 @@ function prettyName(inputString: string): string {
 export const pokemonSVG = (pokemonName: string) => {
     return `
             <svg width="165" height="45">
-            	<text x="0" y="25" text-anchor="left" font-family='Handjet' fontfile='./public/fonts/handjet.ttf' font-size="20" fill="white" font-weight="bold">${prettyName(pokemonName)}</text>
+            	<text x="0" y="25" text-anchor="left" font-size="20" fill="white" font-weight="bold">${prettyName(pokemonName)}</text>
             </svg>
       `;
 };
@@ -107,7 +107,7 @@ export const pokemonSVG = (pokemonName: string) => {
 export const hpHp = (currentHp: number, totalHp: number) => {
     return `
                 <svg width="80" height="45">
-                	<text x="0" y="25" text-anchor="left" font-family='Handjet' fontfile='./public/fonts/handjet.ttf' font-size="22" fill="white">${currentHp}/${totalHp}</text>
+                	<text x="0" y="25" text-anchor="left" font-size="22" fill="white">${currentHp}/${totalHp}</text>
                 </svg>
           `;
 };

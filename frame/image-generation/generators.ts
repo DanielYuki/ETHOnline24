@@ -99,7 +99,7 @@ export const generateFight = async (
         const components = [];
         const sentence = `        
           <svg width="600" height="65">
-            <text x="0" y="32" text-anchor="left" font-family="Arial" font-size="30" fill="white">What will ${pokemonName} do?</text>
+            <text x="0" y="32" text-anchor="left" font-size="30" fill="white">What will ${pokemonName} do?</text>
           </svg>
         `;
         components.push({ input: Buffer.from(sentence), top: 40, left: 60 });
@@ -108,7 +108,7 @@ export const generateFight = async (
         const atk3 = moves(attacks[2].atk);
         const back = `
           <svg width="220" height="75">
-            <text x="15" y="25" text-anchor="left" font-family="Arial" font-size="35" fill="white">BACK</text>
+            <text x="15" y="25" text-anchor="left" font-size="35" fill="white">BACK</text>
           </svg>         
         `
         const hphp = hpHp(currentHp, totalHp);
@@ -273,13 +273,13 @@ export const generatePokemonCard = async (
 
   const pokemon = `
     <svg width="248" height="65">
-      <text x="0" y="48" text-anchor="left" font-family="Arial" font-weight="bold" font-size="45" fill="white">${prettyName(pokemonName)}</text>
+      <text x="0" y="48" text-anchor="left" font-weight="bold" font-size="45" fill="white">${prettyName(pokemonName)}</text>
     </svg>        
     `
 
   const id = `
     <svg width="248" height="65">
-      <text x="0" y="48" text-anchor="left" font-family="Arial" font-weight="bold" font-size="45" fill="white">#${pokemonId}</text>
+      <text x="0" y="48" text-anchor="left" font-weight="bold" font-size="45" fill="white">#${pokemonId}</text>
     </svg>        
   `
 
@@ -302,7 +302,7 @@ export const generatePokemonCard = async (
 
   const typeText = `
   <svg width="248" height="65">
-    <text x="120" y="48" text-anchor="left" font-family="Arial" font-weight="bold" font-size="25" fill="white">ELECTRIC</text>  </svg>        
+    <text x="120" y="48" text-anchor="left" font-weight="bold" font-size="25" fill="white">ELECTRIC</text>  </svg>        
   `
 
   ComponentsArray.push({input: usr1ImageBuffer, top: 160, left: 0});
