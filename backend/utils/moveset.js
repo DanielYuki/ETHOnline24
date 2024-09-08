@@ -1,18 +1,9 @@
 import { Move } from './moves.js';
 
 export const moveset = [
-    new Move(0, 'Swap', null, 0, 100, 'Swap the active Pokemon.', function(owner, battle) {
-      if(owner == 'maker') {
-        // flip two entry array maker_battling_pokemons
-        let temp = battle.maker_battling_pokemons[0];
-        battle.maker_battling_pokemons[0] = battle.maker_battling_pokemons[1];
-        battle.maker_battling_pokemons[1] = temp;
-      } else {
-        // flip two entry array taker_battling_pokemons
-        let temp = battle.taker_battling_pokemons[0];
-        battle.taker_battling_pokemons[0] = battle.taker_battling_pokemons[1];
-        battle.taker_battling_pokemons[1] = temp;
-      }
+    new Move(0, 'Swap', null, 0, null, 'Swap the active Pokemon.', function(agent, battle) {
+      console.log('Swap move executed');
+      this.swapMove(agent, battle);
     }, 10),
     new Move(1, 'Tackle', 'Normal', 40, 100, 'A physical attack that deals damage.', function(agent, battle, attacker, defender) {
       this.dealDamage(agent, battle, attacker, defender);
