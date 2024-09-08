@@ -46,6 +46,11 @@ Battle Fhenix address:  0x9C080703256BDF9Ea1b485aE72f13E31f74C558b
 
 ## Media and Photos
 
-![Screenshot 1](frame/public/image/welcome.png)
-![Screenshot 2](frame/public/image/shareBattle.png)
-![Screenshot 3](frame/public/image/waiting.png)
+![3f33bfcd-4564-4db6-9596-6ebc5d10b0b9](https://github.com/user-attachments/assets/5e9c0d5b-c987-4559-9412-55fc1e75ef76)
+![f955b775-99d6-4d71-8cd0-dc0aa5ee6c5a](https://github.com/user-attachments/assets/10e486d9-b407-4d7b-8c04-05482866ed65)
+![dd264c55-450e-4a7a-817c-3dc70ddc85cb](https://github.com/user-attachments/assets/db4ee0ba-2ef3-4a2d-b6a6-e4a05a631d00)
+![5776e5c4-c64c-4d6f-9a77-01f2e4986731](https://github.com/user-attachments/assets/a8ad5dc2-7e69-49e8-a382-b0cb449acd8d)
+![2817a71a-75a5-47c3-9d61-90b55867b38d](https://github.com/user-attachments/assets/bb4b770f-494b-4e62-8b4c-84a44a90c0e5)
+
+
+
