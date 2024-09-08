@@ -6,7 +6,7 @@ import { devtools } from 'frog/dev';
 import { handle } from 'frog/vercel';
 import { serve } from '@hono/node-server';
 import { assignPokemonToUser, createBattle, getBattleById, getPokemonName, getPokemonsByPlayerId, joinBattle, setSelectedPokemons, makeMove, forfeitBattle } from '../lib/database.js';
-import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, CHAIN_ID, CONTRACT_ADDRESS } from '../config.js';
+import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, CHAIN_ID, CONTRACT_ADDRESS, POKEMON_CONTRACT_ADDRESS } from '../config.js';
 import { boundIndex } from '../lib/utils/boundIndex.js';
 import { generateGame, generateFight, generateBattleConfirm, generateWaitingRoom, generatePokemonCard, generatePokemonMenu } from '../image-generation/generators.js';
 import { getPlayers, verifyMakerOrTaker } from '../lib/utils/battleUtils.js';
@@ -703,6 +703,8 @@ app.frame('/loading', async (c) => {
 
       console.log(transactionReceipt);
 
+      console.log("topics", transactionReceipt?.logs[1].topics);
+
       if (transactionReceipt && transactionReceipt.status == 'reverted') {
         return c.error({ message: 'Transaction failed' });
       }
@@ -772,21 +774,62 @@ app.frame('/finish-mint', async (c) => {
 })
 
 app.transaction('/mint', (c) => {
-  const mintCost = '0.000777';
-  return c.send({
+
+  const abi = [
+    {
+      "type": "function",
+      "name": "requestPokemon",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "requestId",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "nonpayable"
+  }
+  ];
+
+  return c.contract({
+    abi,
+    functionName: 'requestPokemon',
+    args: [],
     chainId: CHAIN_ID,
-    to: CONTRACT_ADDRESS,
-    value: parseEther(mintCost as string),
-  })
+    to: POKEMON_CONTRACT_ADDRESS,
+    value: parseEther("0")
+  });
+
+  // const mintCost = '0.000777';
+  // return c.send({
+  //   chainId: CHAIN_ID,
+  //   to: CONTRACT_ADDRESS,
+  //   value: parseEther(mintCost as string),
+  // })
 })
 
 app.transaction('/create-battle', (c) => {
-  const cost = '0.000777';
-  return c.send({
+
+  const abi = ["function createBattle(uint256 _amountToBet, uint256[] memory _pokemons) public returns (uint256)"];
+
+  return c.contract({
+    abi,
+    functionName: 'createBattle',
+    args: [parseEther('0.000777'), c.previousState.selectedPokemons],
     chainId: CHAIN_ID,
     to: CONTRACT_ADDRESS,
-    value: parseEther(cost as string),
-  })
+    value: parseEther("0")
+  });
+
+
+
+
+  // const cost = '0.000777';
+  // return c.send({
+  //   chainId: CHAIN_ID,
+  //   to: CONTRACT_ADDRESS,
+  //   value: parseEther(cost as string),
+  // })
 })
 
 app.transaction('/join-battle', (c) => {
