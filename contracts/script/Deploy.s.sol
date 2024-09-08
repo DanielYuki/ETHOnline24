@@ -8,7 +8,8 @@ import "@chainlink/contracts/v0.8/mocks/VRFCoordinatorV2Mock.sol";
 
 import {PokemonSource} from "../src/PokemonSource.sol";
 import {Pokemon} from "../src/Pokemon.sol";
-
+import { MockERC20 } from "../src/MockERC20.sol";
+import { Battle } from "../src/Battle.sol"; 
 
 contract Deploy is Script {
     function setUp() public {}
@@ -16,7 +17,9 @@ contract Deploy is Script {
     function run() external {
         vm.startBroadcast(vm.envUint("PRIVATE_KEY"));
 
-        PokemonSource pokemonSource = new PokemonSource(0x000ef5F21dC574226A06C76AAE7060642A30eB74);
+        address targetOwner = 0x000ef5F21dC574226A06C76AAE7060642A30eB74;
+
+        PokemonSource pokemonSource = new PokemonSource(targetOwner);
 
         console.log("Pokemon Source address: ", address(pokemonSource));
 
@@ -101,27 +104,22 @@ contract Deploy is Script {
             possibleMoves3
         );
 
-        //VRFCoordinatorV2Mock coordinator = new VRFCoordinatorV2Mock(1000000000000000,50000000000);
-        
 
-        // console.log("Pokemon Source address: ", address(pokemonSource));
-        // console.log("Total Supply: ", pokemonSource.balanceOf(address(pokemonSource)));
-        // console.log("Coordinator address: ", address(coordinator));
 
         address coordinator = 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B;
 
         uint256 subId = 44185188200136474581824303170604043494972738660298815964976697079211526016416;
         Pokemon pokemon = new Pokemon(address(pokemonSource), address(coordinator), subId);
-
-        // console.log("Subscription ID: ", subId);
         console.log("Pokemon address: ", address(pokemon));
 
-        // coordinator.fundSubscription(uint64(subId), 1000000 ether);
 
-        // coordinator.addConsumer(uint64(subId), address(pokemon));
-    
-        // //pokemon.requestPokemon();
-        // console.log("total supply: ", pokemon.lastRequestId());
+        MockERC20 mockERC20 = new MockERC20(targetOwner);
+
+        Battle battle = new Battle(address(mockERC20));
+
+        console.log("Battle address: ", address(battle));
+        console.log("Battle payment token: ", address(battle.paymentToken()));
+
 
         vm.stopBroadcast();
     }

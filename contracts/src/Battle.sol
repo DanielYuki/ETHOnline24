@@ -73,7 +73,4 @@ contract Battle is ERC721 {
         emit BattleResolved(_battleId, _winner);
     }
 
-
-
-
 }

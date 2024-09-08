@@ -51,7 +51,7 @@ contract Pokemon is ERC721, VRFConsumerBaseV2Plus {
     // this limit based on the network that you select, the size of the request,
     // and the processing of the callback request in the fulfillRandomWords()
     // function.
-    uint32 public callbackGasLimit = 100000;
+    uint32 public callbackGasLimit = 500000;
 
     // The default is 3, but you can set this higher.
     uint16 public requestConfirmations = 3;
@@ -74,7 +74,7 @@ contract Pokemon is ERC721, VRFConsumerBaseV2Plus {
     }
 
 
-    function requestPokemon() public payable returns (uint256 requestId) {
+    function requestPokemon() public returns (uint256 requestId) {
         // Will revert if subscription is not set and funded.
         requestId = s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
@@ -125,19 +125,16 @@ contract Pokemon is ERC721, VRFConsumerBaseV2Plus {
         pokemonToHp[counter] = pokemonSource.pokemonToHpMin(sourceTokenId) + ((randomness % 10000) + 1)/1000 *  (pokemonSource.pokemonToHpMax(sourceTokenId) - pokemonSource.pokemonToHpMin(sourceTokenId));
 
         //second randomness
-        randomness = uint256(keccak256(abi.encodePacked(randomness)));
+        randomness = _randomWords[1];
         pokemonToAttack[counter] = pokemonSource.pokemonToAttackMin(sourceTokenId) + ((randomness % 10000) + 1)/1000 *  (pokemonSource.pokemonToAttackMax(sourceTokenId) - pokemonSource.pokemonToAttackMin(sourceTokenId));
 
         //third randomness
-        randomness = uint256(keccak256(abi.encodePacked(randomness)));
+        randomness = _randomWords[0];
         pokemonToDefense[counter] = pokemonSource.pokemonToDefenseMin(sourceTokenId) + ((randomness % 10000) + 1)/1000 *  (pokemonSource.pokemonToDefenseMax(sourceTokenId) - pokemonSource.pokemonToDefenseMin(sourceTokenId));
 
         //fourth randomness
-        randomness = uint256(keccak256(abi.encodePacked(randomness)));
+        randomness = _randomWords[1];
         pokemonToSpeed[counter] = pokemonSource.pokemonToSpeedMin(sourceTokenId) + ((randomness % 10000) + 1)/1000 *  (pokemonSource.pokemonToSpeedMax(sourceTokenId) - pokemonSource.pokemonToSpeedMin(sourceTokenId));
-        
-        //fifth randomness
-        randomness = uint256(keccak256(abi.encodePacked(randomness)));
         
         _mint(pokemonOwner, counter);
         emit RequestFulfilled(_requestId, _randomWords);

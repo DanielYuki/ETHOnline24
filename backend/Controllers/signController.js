@@ -8,7 +8,7 @@ export const signProtocol = async (req, res) => {
 
     try{
 
-        const privateKey = "0xfca9a00671d59ee310213f1abfaee37e2500daf7553210a17f99d863dfaaf551";
+        const privateKey = process.env.PRIVATE_KEY;
         console.log("signing protocol");
         const client = new SignProtocolClient(SpMode.OnChain, {
             chain: EvmChains.sepolia,
