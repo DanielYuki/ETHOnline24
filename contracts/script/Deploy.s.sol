@@ -5,6 +5,7 @@ import "forge-std/Script.sol";
 import "forge-std/console.sol";
 
 import "@chainlink/contracts/v0.8/mocks/VRFCoordinatorV2Mock.sol";
+
 import {PokemonSource} from "../src/PokemonSource.sol";
 import {Pokemon} from "../src/Pokemon.sol";
 
@@ -15,7 +16,9 @@ contract Deploy is Script {
     function run() external {
         vm.startBroadcast(vm.envUint("PRIVATE_KEY"));
 
-        PokemonSource pokemonSource = new PokemonSource(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
+        PokemonSource pokemonSource = new PokemonSource(0x000ef5F21dC574226A06C76AAE7060642A30eB74);
+
+        console.log("Pokemon Source address: ", address(pokemonSource));
 
         string[] memory types = new string[](2);
         types[0] = "Grass";
@@ -98,25 +101,27 @@ contract Deploy is Script {
             possibleMoves3
         );
 
-        VRFCoordinatorV2Mock coordinator = new VRFCoordinatorV2Mock(1000000000000000,50000000000);
+        //VRFCoordinatorV2Mock coordinator = new VRFCoordinatorV2Mock(1000000000000000,50000000000);
         
 
-        console.log("Pokemon Source address: ", address(pokemonSource));
-        console.log("Total Supply: ", pokemonSource.balanceOf(address(pokemonSource)));
-        console.log("Coordinator address: ", address(coordinator));
+        // console.log("Pokemon Source address: ", address(pokemonSource));
+        // console.log("Total Supply: ", pokemonSource.balanceOf(address(pokemonSource)));
+        // console.log("Coordinator address: ", address(coordinator));
 
-        uint256 subId = coordinator.createSubscription();
+        address coordinator = 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B;
+
+        uint256 subId =  44185188200136474581824303170604043494972738660298815964976697079211526016416;
         Pokemon pokemon = new Pokemon(address(pokemonSource), address(coordinator), subId);
 
-        console.log("Subscription ID: ", subId);
+        // console.log("Subscription ID: ", subId);
         console.log("Pokemon address: ", address(pokemon));
 
-        coordinator.fundSubscription(uint64(subId), 1000000 ether);
+        // coordinator.fundSubscription(uint64(subId), 1000000 ether);
 
-        coordinator.addConsumer(uint64(subId), address(pokemon));
+        // coordinator.addConsumer(uint64(subId), address(pokemon));
     
-        pokemon.requestPokemon();
-        console.log("total supply: ", pokemon.lastRequestId());
+        // //pokemon.requestPokemon();
+        // console.log("total supply: ", pokemon.lastRequestId());
 
         vm.stopBroadcast();
     }
