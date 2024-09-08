@@ -6,10 +6,11 @@ import { devtools } from 'frog/dev';
 import { handle } from 'frog/vercel';
 import { serve } from '@hono/node-server';
 import { assignPokemonToUser, createBattle, getBattleById, getPokemonName, getPokemonsByPlayerId, joinBattle, setSelectedPokemons, makeMove, forfeitBattle } from '../lib/database.js';
-import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, CHAIN_ID, CONTRACT_ADDRESS } from '../config.js';
+import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, CHAIN_ID, CONTRACT_ADDRESS, POKEMON_CONTRACT_ADDRESS } from '../config.js';
 import { boundIndex } from '../lib/utils/boundIndex.js';
 import { generateGame, generateFight, generateBattleConfirm, generateWaitingRoom, generatePokemonCard, generatePokemonMenu } from '../image-generation/generators.js';
 import { getPlayers, verifyMakerOrTaker } from '../lib/utils/battleUtils.js';
+import { handleFrameLog } from '../lib/utils/handleFrameLog.js';
 import { validateFramesPost } from '@xmtp/frames-validator';
 import { Context, Next } from 'hono';
 import { getPokemonTypeColor } from '../image-generation/pkmTypeColor.js';
@@ -613,6 +614,25 @@ app.frame('/battle/:gameId/pokemon/:enemyFid', async (c) => {
   })
 });
 
+// TODO implement battle log (IMAGE GENERATION)
+app.frame('/battle/:gameId/battlelog', async (c) => {
+  const gameId = c.req.param('gameId') as string;
+  const battle: any = await getBattleById(Number(gameId));
+
+  const battleLog = battle.battle_log;
+
+  console.log(handleFrameLog(battleLog, battle.current_turn));
+
+  return c.res({
+    title,
+    image: '/battle-fight.png',
+    imageAspectRatio: '1:1',
+    intents: [
+      <Button action={`/battle/${gameId}`}>↩️</Button>
+    ]
+  })
+});
+
 app.frame('/battle/:gameId/run', async (c) => {
   const gameId = c.req.param('gameId') as string;
   //TODO Backend function to set a winner and end the battle 
@@ -703,6 +723,8 @@ app.frame('/loading', async (c) => {
 
       console.log(transactionReceipt);
 
+      console.log("topics", transactionReceipt?.logs[1].topics);
+
       if (transactionReceipt && transactionReceipt.status == 'reverted') {
         return c.error({ message: 'Transaction failed' });
       }
@@ -772,21 +794,62 @@ app.frame('/finish-mint', async (c) => {
 })
 
 app.transaction('/mint', (c) => {
-  const mintCost = '0.000777';
-  return c.send({
+
+  const abi = [
+    {
+      "type": "function",
+      "name": "requestPokemon",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "requestId",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "nonpayable"
+  }
+  ];
+
+  return c.contract({
+    abi,
+    functionName: 'requestPokemon',
+    args: [],
     chainId: CHAIN_ID,
-    to: CONTRACT_ADDRESS,
-    value: parseEther(mintCost as string),
-  })
+    to: POKEMON_CONTRACT_ADDRESS,
+    value: parseEther("0")
+  });
+
+  // const mintCost = '0.000777';
+  // return c.send({
+  //   chainId: CHAIN_ID,
+  //   to: CONTRACT_ADDRESS,
+  //   value: parseEther(mintCost as string),
+  // })
 })
 
 app.transaction('/create-battle', (c) => {
-  const cost = '0.000777';
-  return c.send({
+
+  const abi = ["function createBattle(uint256 _amountToBet, uint256[] memory _pokemons) public returns (uint256)"];
+
+  return c.contract({
+    abi,
+    functionName: 'createBattle',
+    args: [parseEther('0.000777'), c.previousState.selectedPokemons],
     chainId: CHAIN_ID,
     to: CONTRACT_ADDRESS,
-    value: parseEther(cost as string),
-  })
+    value: parseEther("0")
+  });
+
+
+
+
+  // const cost = '0.000777';
+  // return c.send({
+  //   chainId: CHAIN_ID,
+  //   to: CONTRACT_ADDRESS,
+  //   value: parseEther(cost as string),
+  // })
 })
 
 app.transaction('/join-battle', (c) => {
@@ -938,7 +1001,7 @@ app.hono.get('/image/pokemon/:id/:name', async (c) => {
   try {
     const id = Number(c.req.param('id'));
     const name = c.req.param('name')
-    const image = await generatePokemonCard(id, name)
+    const image = await generatePokemonCard(id, name, 70, 20, 51) //review this later
 
     return c.newResponse(image, 200, {
       'Content-Type': 'image/png',

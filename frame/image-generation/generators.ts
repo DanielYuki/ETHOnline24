@@ -2,7 +2,7 @@ import sharp from "sharp";
 import { Attack } from "../types/types.js";
 
 import { attackType, hpHp, hpSVG, moves, moves2, pokemonSVG, statsBox1, statsBox2, statusPokemon, typeBox, typeBox2 } from "./functions.js";
- 
+import { getPokemonTypeColor } from "./pkmTypeColor.js";
 
 export const generateGame = async (
     pokemon1Name: string,
@@ -238,6 +238,9 @@ function prettyName(inputString: string): string {
 export const generatePokemonCard = async (
   pokemonId: number,
   pokemonName: string,
+  pokemonHp: number,
+  pokemonAtk: number,
+  pokemonDef: number,
 ) => {
   try {
   const ComponentsArray = [];
@@ -248,18 +251,64 @@ export const generatePokemonCard = async (
   .toBuffer();
 
   const usr1ImageBuffer = await sharp(`./public/pokemons/${pokemonId}.png`)
-  .resize(400, 400)
+  .resize(300, 300)
+  .png()
+  .toBuffer();
+
+  const usr2ImageBuffer = await sharp(`./public/pokemons/icons/${pokemonId-1}.png`)
+  .resize(100, 100)
+  .png()
+  .toBuffer();
+
+  const usr3ImageBuffer = await sharp(`./public/pokemons/icons/${pokemonId+1}.png`)
+  .resize(100, 100)
   .png()
   .toBuffer();
 
   const pokemon = `
-  <svg width="248" height="65">
-    <text x="120" y="48" text-anchor="middle" font-family="Handjet" font-size="38" fill="white">${prettyName(pokemonName)}</text>
-  </svg>        
+    <svg width="248" height="65">
+      <text x="0" y="48" text-anchor="left" font-family="Handjet" font-weight="bold" font-size="45" fill="white">${prettyName(pokemonName)}</text>
+    </svg>        
+    `
+
+  const id = `
+    <svg width="248" height="65">
+      <text x="0" y="48" text-anchor="left" font-family="Handjet" font-weight="bold" font-size="45" fill="white">#${pokemonId}</text>
+    </svg>        
   `
 
-  ComponentsArray.push({input: usr1ImageBuffer, top: 138, left: 113});
-  ComponentsArray.push({input: Buffer.from(pokemon), top: 23, left: 260});
+  const statsBar = ((stats: number) => {
+    return `
+      <svg width="178" height="7" fill="none">
+        <rect width="178" height="7" rx="3.5" fill="#F3EEEE"/>
+        <rect width="${stats*2}" height="7" rx="3.5" fill="${stats < 50 ? "#FF4242" : "#33BC56"}"/>
+      </svg>
+    `
+  })
+
+  const pokeType = ((pokemonTypeColor: string) => {
+    return `
+    <svg width="154" height="65" fill="none">
+      <rect width="154" height="64.1667" rx="32.0833" fill="${getPokemonTypeColor(pokemonTypeColor)}"/>
+    </svg>
+    `
+  })
+
+  const typeText = `
+  <svg width="248" height="65">
+    <text x="120" y="48" text-anchor="left" font-family="Handjet" font-weight="bold" font-size="25" fill="white">ELECTRIC</text>  </svg>        
+  `
+
+  ComponentsArray.push({input: usr1ImageBuffer, top: 160, left: 0});
+  ComponentsArray.push({input: usr2ImageBuffer, top: 490, left: 27});
+  ComponentsArray.push({input: usr3ImageBuffer, top: 490, left: 470});
+  ComponentsArray.push({input: Buffer.from(pokemon), top: 46, left: 328});
+  ComponentsArray.push({input: Buffer.from(pokeType("Electric")), top: 140, left: 328});
+  ComponentsArray.push({input: Buffer.from(typeText), top: 130, left: 218});
+  ComponentsArray.push({input: Buffer.from(id), top: 46, left: 20});
+  ComponentsArray.push({input: Buffer.from(statsBar(pokemonHp)), top: 248, left: 412});
+  ComponentsArray.push({input: Buffer.from(statsBar(pokemonAtk)), top: 297, left: 412});
+  ComponentsArray.push({input: Buffer.from(statsBar(pokemonDef)), top: 346, left: 412});
 
   const finalImage = await sharp(baseImageBuffer)
   .composite(ComponentsArray)

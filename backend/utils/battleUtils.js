@@ -207,14 +207,17 @@ export const performBattle = (battle) => {
     moveset[0].swapMove('maker', battle);
     moveset[0].swapMove('taker', battle);
 
+    console.log('Both players swapped pokemons!');
+
     resetPlayerMove('maker', battle);
     resetPlayerMove('taker', battle);
   } else if(next == 'maker-swap' || next == 'taker-swap') {
     const executor = next == 'maker-swap' ? 'maker' : 'taker';
     moveset[0].swapMove(executor, battle);
 
-    resetPlayerMove('maker', battle);
-    resetPlayerMove('taker', battle);
+    console.log(`${executor} swapped pokemons!`);
+
+    resetPlayerMove(executor, battle);
   } else {
     moveset[next == 'maker' ? battle.maker_move : battle.taker_move].executeMove(next, battle);
 

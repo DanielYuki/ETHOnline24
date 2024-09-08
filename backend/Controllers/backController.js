@@ -305,8 +305,9 @@ export const makeMove = async (req, res) => {
     }
 
     updateMove(battle, userFid, move);
-
+    
     if (bothPlayersMoved(battle)) {
+      battle.battle_log.push(`Turn ${++battle.current_turn}`);
       console.log('performing battle...');
       performBattle(battle);
     }
