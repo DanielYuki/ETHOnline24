@@ -189,6 +189,10 @@ export const getBattleById = async (req, res) => {
         throw err;
       }
 
+      if(!row) {
+        return res.status(404).json({ message: 'Battle not found' });
+      }
+
       const battle = createBattleInstance(row);
 
       res.status(200).json(battle);
