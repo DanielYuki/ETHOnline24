@@ -37,11 +37,15 @@ Battle Fhenix address:  0x9C080703256BDF9Ea1b485aE72f13E31f74C558b
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/)
-- [Farcaster Frames](https://farcaster.xyz/)
+- Node.js
+- Open Frames (+XMTP)
+- Message Kit
+- FHE (Fhenix)
+- Redis
+- SQLite
 
 ## Media and Photos
 
-![Screenshot 1](frame/public/welcome.png)
-![Screenshot 2](frame/public/shareBattle.png)
-![Screenshot 3](frame/public/waiting.png)
+![Screenshot 1](frame/public/image/welcome.png)
+![Screenshot 2](frame/public/image/shareBattle.png)
+![Screenshot 3](frame/public/image/waiting.png)
