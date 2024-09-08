@@ -793,8 +793,8 @@ app.frame('/share/:pokemonId', (c) => {
 app.frame('/test', (c) => {
   return c.res({
     title,
-    image: `/image/vs/test`,
-    imageAspectRatio: '1.91:1',
+    image: `/image/pokemon/6/Charizard`,
+    imageAspectRatio: '1:1',
     intents: [
       <Button action={`/`}>TRY IT OUT 🏠</Button>,
     ],
@@ -899,7 +899,7 @@ app.hono.get('/image/pokemon/:id/:name', async (c) => {
   try {
     const id = Number(c.req.param('id'));
     const name = c.req.param('name')
-    const image = await generatePokemonCard(id, name)
+    const image = await generatePokemonCard(id, name, 70, 20, 51)
 
     return c.newResponse(image, 200, {
       'Content-Type': 'image/png',
