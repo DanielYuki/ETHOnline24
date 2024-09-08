@@ -393,7 +393,7 @@ export const getUserBattlesByWallet = async (req, res) => {
         return res.status(500).json({ message: 'Error getting battles', error: err.message });
       }
 
-      const battles = rows.map(row => row.id);
+      const battles = rows;
 
       res.status(200).json({ battles });
     })
