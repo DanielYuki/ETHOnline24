@@ -812,6 +812,7 @@ app.hono.get('/image/vs/test', async (c) => {
       70,
       60,
       60,
+      1,
     );
 
     return c.newResponse(image, 200, {
@@ -829,6 +830,7 @@ app.hono.get('/image/vs/:gameId/user/:userFid', async (c) => {
 
   const { player, opponent } = getPlayers(Number(c.req.param('userFid')), battle);
   // console.log(player)
+  const id = (Number(c.req.param('gameId')) % 6) + 1;
   try {
     const image = await generateGame(
       player.currentPokemon.name.toString(),
@@ -839,6 +841,7 @@ app.hono.get('/image/vs/:gameId/user/:userFid', async (c) => {
       player.currentPokemon.status.currentHP,
       opponent.currentPokemon.hp,
       opponent.currentPokemon.status.currentHP,
+      id,
     );
 
     return c.newResponse(image, 200, {

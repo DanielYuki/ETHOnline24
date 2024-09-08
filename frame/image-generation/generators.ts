@@ -12,7 +12,8 @@ export const generateGame = async (
     totalHP1: number,
     currentHp1: number,
     totalHP2: number,
-    currentHp2: number
+    currentHp2: number,
+    id: number
   ) => {
     try {
   
@@ -37,8 +38,7 @@ export const generateGame = async (
   
         return components;
       })
-      const bg = Math.ceil(Math.random()*6);
-      const baseImageBuffer = await sharp(`./public/battle-scenes/${bg}.png`)
+      const baseImageBuffer = await sharp(`./public/battle-scenes/${id}.png`)
       .png()
       .toBuffer();
 
