@@ -86,7 +86,7 @@ export const getBattleIdByStatus = async (req, res) => {
     }
     const battles = col;
     const battleIds = battles.map(battle => battle.id);
-    res.status(200).json(battleIds);
+    res.status(200).json({battles: battleIds});
   })
 }
 
