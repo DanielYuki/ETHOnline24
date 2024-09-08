@@ -11,4 +11,7 @@ export const SHARE_EMBEDS = '&embeds[]=';
 export const FRAME_URL = ''; //// ADD LINK WHEN DEPLOYED
 export const CHAIN_ID = 'eip155:11155111'; // 11155111 sepolia
 export const CONTRACT_ADDRESS = '0x02f37D3C000Fb5D2A824a3dc3f1a29fa5530A8D4'; // ADD CONTRACT ADDRESS
+
+export const POKEMON_CONTRACT_ADDRESS='0xab8f1a9d868a37e1aA95cDa6fC83ACc53B2A7495';
+export const BATTLE_CONTRACT_ADDRESS='0xeA5968EA357df52f29D9B44613fA64118aE03D36';
 export const title = 'PokeFrame';

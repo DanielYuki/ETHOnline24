@@ -1,6 +1,7 @@
 import express from 'express';
 
-import { assignPokemon, createBattle, getBattleById, getBattleIdByStatus, getPokemonById, getPokemonName, joinBattle, makeMove, pokemonsByPlayerId, selectPokemons, sendTransaction, forfeitBattle } from '../Controllers/backController.js';
+import { signProtocol } from '../Controllers/signController.js';
+import { assignPokemon, createBattle, getBattleById, getBattleIdByStatus, getPokemonById, getPokemonName, joinBattle, makeMove, pokemonsByPlayerId, selectPokemons, sendTransaction, forfeitBattle, forfeitBattle } from '../Controllers/backController.js';
 import { registerConverseWallet, retrieveFidFromConverseWallet } from '../Controllers/subscribeController.js';
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.get('/send', sendTransaction);
 router.get('/pokemon/:id', getPokemonById);
 router.get('/pokemon/:id/name', getPokemonName);
 router.get('/get/:status', getBattleIdByStatus);
+router.post('/schema', signProtocol);
 
 export default router;
