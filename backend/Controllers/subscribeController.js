@@ -1,9 +1,9 @@
 import db from "../database.js";
 
 export const retrieveFidFromConverseUsername = (req, res) => {
-  const { username } = req.params;
+  const { wallet } = req.params;
 
-  db.get('SELECT fid FROM converse WHERE username = ?', [username], (err, row) => {
+  db.get('SELECT fid FROM converse WHERE wallet = ?', [wallet], (err, row) => {
     if (err) {
       console.error('Error while retrieving fid from converse: ', err);
       return res.status(500).json({ message: 'An error occurred' });
@@ -17,15 +17,15 @@ export const retrieveFidFromConverseUsername = (req, res) => {
   });
 }
 
-export const registerConverseUsername = (req, res) => {
-  const { username, fid } = req.body;
-  
-  db.run('INSERT OR REPLACE INTO converse (username, fid) VALUES (?, ?)', [username, fid], (err) => {
+export const registerConverseWallet = (req, res) => {
+  const { wallet, fid } = req.body;
+
+  db.run('INSERT OR REPLACE INTO converse (wallet, fid) VALUES (?, ?)', [wallet, fid], (err) => {
     if (err) {
-      console.error('Error while registering converse username: ', err);
+      console.error('Error while registering converse wallet: ', err);
       return res.status(500).json({ message: 'An error occurred' });
     }
 
-    res.status(200).json({ message: 'Username registered successfully' });
+    res.status(200).json({ message: 'Wallet registered successfully' });
   });
 }
