@@ -21,5 +21,6 @@ router.get('/pokemon/:id', getPokemonById);
 router.get('/pokemon/:id/name', getPokemonName);
 router.get('/get/:status', getBattleIdByStatus);
 router.get('/converse-user/:wallet/battles', getUserBattlesByWallet);
+router.get('/user/:fid/battles', getUserBattlesByFid);
 
 export default router;

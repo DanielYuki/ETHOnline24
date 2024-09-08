@@ -237,7 +237,7 @@ app.frame('/battle/handle', async (c) => {
       if (transactionReceipt?.status === 'success') {
         return c.res({
           title,
-          image: `/go!.png`,
+          image: `/images/go!.png`,
           imageAspectRatio: '1:1',
           intents: [
             <Button action={`/finish-battle-create`}>GO! 🔥</Button>,
@@ -251,7 +251,7 @@ app.frame('/battle/handle', async (c) => {
 
   return c.res({
     title,
-    image: `/loading.gif`,
+    image: `/images/loading.gif`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/handle`}>REFRESH 🔄️</Button>,
@@ -286,7 +286,7 @@ app.frame('/finish-battle-create', async (c) => {
 
   return c.res({
     title,
-    image: `/shareBattle.png`,
+    image: `/images/shareBattle.png`,
     imageAspectRatio: '1:1',
     intents: [
       <Button.Link href={`${SHARE_INTENT}/${SHARE_TEXT}/${SHARE_EMBEDS}/${FRAME_URL}/battle/share/${newBattleId}`}>SHARE</Button.Link>,
@@ -330,7 +330,7 @@ app.frame('/battle/:gameId/join', async (c) => {
       if (transactionReceipt?.status === 'success') {
         return c.res({
           title,
-          image: `/go!.png`,
+          image: `/images/go!.png`,
           imageAspectRatio: '1:1',
           intents: [
             <Button value={gameId.toString()} action={`/finish-battle-join`}>GO! 🔥</Button>,
@@ -344,7 +344,7 @@ app.frame('/battle/:gameId/join', async (c) => {
 
   return c.res({
     title,
-    image: `/loading.gif`,
+    image: `/images/loading.gif`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}/join`}>REFRESH 🔄️</Button>,
@@ -377,7 +377,7 @@ app.frame('/finish-battle-join', async (c) => {
 
   return c.res({
     title,
-    image: `/go!.png`,
+    image: `/images/go!.png`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}`}>BATTLE⚔️</Button>,
@@ -416,7 +416,7 @@ app.frame('/battle/:gameId', async (c) => {
   if (battleStatus === "waiting") {
     return c.res({
       title,
-      image: `/waiting-for-p2.png`,
+      image: `/images/waiting-for-p2.png`,
       imageAspectRatio: '1:1',
       intents: [
         <Button action={`/battle/${gameId}`}>RELOAD 🔄️</Button>,
@@ -735,7 +735,7 @@ app.frame('/loading', async (c) => {
 
         return c.res({
           title,
-          image: `/pokeball.gif`,
+          image: `/images/pokeball.gif`,
           imageAspectRatio: '1:1',
           intents: [
             <Button action={`/finish-mint`}>CATCH</Button>,
@@ -748,7 +748,7 @@ app.frame('/loading', async (c) => {
   }
   return c.res({
     title,
-    image: `/loading.gif`,
+    image: `/images/loading.gif`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/loading`}>REFRESH 🔄️</Button>,
@@ -782,7 +782,7 @@ app.frame('/finish-mint', async (c) => {
 
   return c.res({
     title,
-    image: `/pokeball.gif`,
+    image: `/images/pokeball.gif`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/gotcha/${pokemonId}`}>FINISH!</Button>,
@@ -905,7 +905,7 @@ app.frame('/share/:pokemonId', (c) => {
   const pokemonId = c.req.param('pokemonId');
   return c.res({
     title,
-    image: `/${pokemonId}.png`,
+    image: `/images/${pokemonId}.png`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/`}>TRY IT OUT 🏠</Button>,
