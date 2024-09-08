@@ -7,7 +7,7 @@ import { bothPlayersMoved, createBattleInstance, getBattleFromDb, isUserPartOfBa
 import { moveset } from "../utils/moveset.js";
 import { MT19937 } from "../utils/MT19937.js";
 
-import { FhenixClient } from 'fhenixjs';
+import { EncryptionTypes, FhenixClient } from 'fhenixjs';
 import { JsonRpcProvider } from 'ethers';
 import { BattleFhenixAbi } from "../abis/BattleFhenix.js";
 
@@ -244,6 +244,8 @@ export const joinBattle = async (req, res) => {
 
     try{ 
 
+      const signer = new ethers.Signer()
+
       const battleContract = new ethers.Contract(process.env.BATTLE_CONTRACT_ADDRESS, BattleFhenixAbi , localSigner);
 
       const row = await getBattleFromDb(battleId);
@@ -251,10 +253,6 @@ export const joinBattle = async (req, res) => {
       const maker = row.maker;
 
       battleContract.registerBattle(battleId, maker, taker);
-
-      
-
-      
 
     } catch(err){
       console.log(err);
@@ -356,6 +354,26 @@ export const makeMove = async (req, res) => {
     }
 
     res.status(200).json({ message: 'Battle status changed', battle });
+
+    try{
+
+      const moveEncrypted = await client.encrypt(move, EncryptionTypes.uint256);
+
+      const battleContract = new ethers.Contract(process.env.BATTLE_CONTRACT_ADDRESS, BattleFhenixAbi , localSigner);
+
+      if(userFid == battle.maker) {
+
+        battleContract.registerMoveMaker(battleId, moveEncrypted);
+
+      } else{
+        battleContract.registerMoveTaker(battleId, moveEncrypted)
+      }
+
+    } catch(err){
+      console.log(err);
+    }
+
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'An error occurred' });
