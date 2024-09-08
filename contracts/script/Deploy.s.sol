@@ -110,7 +110,7 @@ contract Deploy is Script {
 
         address coordinator = 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B;
 
-        uint256 subId =  44185188200136474581824303170604043494972738660298815964976697079211526016416;
+        uint256 subId = 44185188200136474581824303170604043494972738660298815964976697079211526016416;
         Pokemon pokemon = new Pokemon(address(pokemonSource), address(coordinator), subId);
 
         // console.log("Subscription ID: ", subId);

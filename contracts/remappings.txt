@@ -9,3 +9,5 @@ forge-std/=lib/forge-std/src/
 foundry-chainlink-toolkit/=lib/foundry-chainlink-toolkit/
 openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/
 openzeppelin-contracts/=lib/openzeppelin-contracts/
+
+@fhenixprotocol/contracts/=node_modules/@fhenixprotocol/contracts/
