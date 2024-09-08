@@ -73,7 +73,7 @@ app.use('/*', serveStatic({ root: './public' }))
 app.frame('/', (c) => {
   return c.res({
     title,
-    image: '/start.png',
+    image: '/images/start.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/verify`}>PLAY 🔴</Button>,
@@ -102,7 +102,7 @@ app.frame('/verify', async (c) => {
   }
   return c.res({
     title,
-    image: '/welcome.png',
+    image: '/images/welcome.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle`}>BATTLE ⚔️</Button>,
@@ -125,7 +125,7 @@ app.frame('/battle', async (c) => {
 
   return c.res({
     title,
-    image: '/battle3.png',
+    image: '/images/battle3.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/pokemons/0/0`}>POKEMONS</Button>,
@@ -161,9 +161,6 @@ app.frame('/pokemons/:position/:index', async (c) => {
     c.deriveState((prevState: any) => {
       prevState.selectedPokemons = selectedPokemons;
     });
-
-    console.log(playerPokemons)
-    console.log(selectedPokemons)
 
     if (index == 3) {
       return c.res({
@@ -240,7 +237,7 @@ app.frame('/battle/handle', async (c) => {
       if (transactionReceipt?.status === 'success') {
         return c.res({
           title,
-          image: `/go!.png`,
+          image: `/images/go!.png`,
           imageAspectRatio: '1:1',
           intents: [
             <Button action={`/finish-battle-create`}>GO! 🔥</Button>,
@@ -254,7 +251,7 @@ app.frame('/battle/handle', async (c) => {
 
   return c.res({
     title,
-    image: `/loading.gif`,
+    image: `/images/loading.gif`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/handle`}>REFRESH 🔄️</Button>,
@@ -271,7 +268,7 @@ app.frame('/finish-battle-create', async (c) => {
   if (newBattleId === 'Already creating battle') {
     return c.res({
       title,
-      image: '/loading.gif',
+      image: '/images/loading.gif',
       imageAspectRatio: '1:1',
       intents: [
         <Button action={`/finish-battle-create`}>WAIT...</Button>,
@@ -289,7 +286,7 @@ app.frame('/finish-battle-create', async (c) => {
 
   return c.res({
     title,
-    image: `/shareBattle.png`,
+    image: `/images/shareBattle.png`,
     imageAspectRatio: '1:1',
     intents: [
       <Button.Link href={`${SHARE_INTENT}/${SHARE_TEXT}/${SHARE_EMBEDS}/${FRAME_URL}/battle/share/${newBattleId}`}>SHARE</Button.Link>,
@@ -333,7 +330,7 @@ app.frame('/battle/:gameId/join', async (c) => {
       if (transactionReceipt?.status === 'success') {
         return c.res({
           title,
-          image: `/go!.png`,
+          image: `/images/go!.png`,
           imageAspectRatio: '1:1',
           intents: [
             <Button value={gameId.toString()} action={`/finish-battle-join`}>GO! 🔥</Button>,
@@ -347,7 +344,7 @@ app.frame('/battle/:gameId/join', async (c) => {
 
   return c.res({
     title,
-    image: `/loading.gif`,
+    image: `/images/loading.gif`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}/join`}>REFRESH 🔄️</Button>,
@@ -366,7 +363,7 @@ app.frame('/finish-battle-join', async (c) => {
   if (message === 'Already joining battle') {
     return c.res({
       title,
-      image: '/loading.gif',
+      image: '/images/loading.gif',
       imageAspectRatio: '1:1',
       intents: [
         <Button action={`/finish-battle-join`}>WAIT...</Button>,
@@ -380,7 +377,7 @@ app.frame('/finish-battle-join', async (c) => {
 
   return c.res({
     title,
-    image: `/go!.png`,
+    image: `/images/go!.png`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}`}>BATTLE⚔️</Button>,
@@ -419,7 +416,7 @@ app.frame('/battle/:gameId', async (c) => {
   if (battleStatus === "waiting") {
     return c.res({
       title,
-      image: `/waiting-for-p2.png`,
+      image: `/images/waiting-for-p2.png`,
       imageAspectRatio: '1:1',
       intents: [
         <Button action={`/battle/${gameId}`}>RELOAD 🔄️</Button>,
@@ -449,7 +446,7 @@ app.frame('/battle/share/:gameId', async (c) => {
 
   return c.res({
     title,
-    image: '/p2-pokemons.png',
+    image: '/images/p2-pokemons.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button value={gameId} action='/pokemons/0/0'>POKEMONS 📱</Button>,
@@ -471,7 +468,7 @@ app.frame('/battle/:gameId/checkout', async (c) => {
   if (winner === role) {
     return c.res({
       title,
-      image: '/winner.png',
+      image: '/images/winner.png',
       imageAspectRatio: '1:1',
       intents: [
         <Button action='/'>PLAY AGAIN 🔄️</Button>,
@@ -480,7 +477,7 @@ app.frame('/battle/:gameId/checkout', async (c) => {
   } else {
     return c.res({
       title,
-      image: '/loser.png',
+      image: '/images/loser.png',
       imageAspectRatio: '1:1',
       intents: [
         <Button action='/'>PLAY AGAIN 🔄️</Button>,
@@ -513,7 +510,7 @@ app.frame('/battle/:gameId/confirm', async (c) => {
 
   return c.res({
     title,
-    image: '/confirm-move.png',
+    image: '/images/confirm-move.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}/waiting/${buttonValue}`}>YES</Button>,
@@ -546,7 +543,7 @@ app.frame('/battle/:gameId/waiting/:value', async (c) => {
   if (updatedBattle.status === 'ended') {
     return c.res({
       title,
-      image: '/winner.png',
+      image: '/images/winner.png',
       imageAspectRatio: '1:1',
       intents: [
         <Button action={`/battle/${gameId}/checkout`}>PLAY AGAIN 🔄️</Button>,
@@ -557,7 +554,7 @@ app.frame('/battle/:gameId/waiting/:value', async (c) => {
   if (updatedBattle.maker_move == null && updatedBattle.taker_move == null) {
     return c.res({
       title,
-      image: '/waiting-for-p2.png',
+      image: '/images/waiting-for-p2.png',
       imageAspectRatio: '1:1',
       intents: [
         <Button action={`/battle/${gameId}`}>🔄️</Button>,
@@ -566,7 +563,7 @@ app.frame('/battle/:gameId/waiting/:value', async (c) => {
   } else {
     return c.res({
       title,
-      image: '/waiting-for-p2.png',
+      image: '/images/waiting-for-p2.png',
       imageAspectRatio: '1:1',
       intents: [
         <Button action={`/battle/${gameId}/waiting/${value}`}>🔄️</Button>,
@@ -625,7 +622,7 @@ app.frame('/battle/:gameId/battlelog', async (c) => {
 
   return c.res({
     title,
-    image: '/battle-fight.png',
+    image: '/images/battle-fight.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}`}>↩️</Button>
@@ -638,7 +635,7 @@ app.frame('/battle/:gameId/run', async (c) => {
   //TODO Backend function to set a winner and end the battle 
   return c.res({
     title,
-    image: '/RUN.png',
+    image: '/images/RUN.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}`}>NO</Button>,
@@ -656,7 +653,7 @@ app.frame('/battle/:gameId/forfeit', async (c) => {
 
   return c.res({
     title,
-    image: '/loser.png',
+    image: '/images/loser.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button.Reset>PLAY AGAIN 🔄️</Button.Reset>,
@@ -693,7 +690,7 @@ app.frame('/pokedex/:position', async (c) => {
 app.frame('/new', (c) => {
   return c.res({
     title,
-    image: '/gacha1.png',
+    image: '/images/gacha1.png',
     imageAspectRatio: '1:1',
     intents: [
       <Button.Transaction action={`/loading`} target={`/mint`}>CAPTURE 🕹️</Button.Transaction>,
@@ -738,7 +735,7 @@ app.frame('/loading', async (c) => {
 
         return c.res({
           title,
-          image: `/pokeball.gif`,
+          image: `/images/pokeball.gif`,
           imageAspectRatio: '1:1',
           intents: [
             <Button action={`/finish-mint`}>CATCH</Button>,
@@ -751,7 +748,7 @@ app.frame('/loading', async (c) => {
   }
   return c.res({
     title,
-    image: `/loading.gif`,
+    image: `/images/loading.gif`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/loading`}>REFRESH 🔄️</Button>,
@@ -771,7 +768,7 @@ app.frame('/finish-mint', async (c) => {
   if (pokemonId == 0) {
     return c.res({
       title,
-      image: '/pokeball.gif',
+      image: '/images/pokeball.gif',
       imageAspectRatio: '1:1',
       intents: [
         <Button action={`/finish-mint`}>WAIT...</Button>,
@@ -785,7 +782,7 @@ app.frame('/finish-mint', async (c) => {
 
   return c.res({
     title,
-    image: `/pokeball.gif`,
+    image: `/images/pokeball.gif`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/gotcha/${pokemonId}`}>FINISH!</Button>,
@@ -909,7 +906,7 @@ app.frame('/share/:pokemonId', (c) => {
   const pokemonId = c.req.param('pokemonId');
   return c.res({
     title,
-    image: `/${pokemonId}.png`,
+    image: `/images/${pokemonId}.png`,
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/`}>TRY IT OUT 🏠</Button>,
