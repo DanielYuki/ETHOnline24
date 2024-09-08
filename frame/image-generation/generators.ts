@@ -38,23 +38,23 @@ export const generateGame = async (
   
         return components;
       })
-      const baseImageBuffer = await sharp(`/battle-scenes/${id}.png`)
+      const baseImageBuffer = await sharp(`./public/images/battle-scenes/${id}.png`)
       .png()
       .toBuffer();
 
-      const battleImageBuffer = await sharp('/battle-scenes/1.png')
+      const battleImageBuffer = await sharp('./public/images/battle-scenes/1.png')
         .resize(630, 379)
         .png()
         .toBuffer();
   
       const gameComponentsArray = gameComponents();
   
-      const pokemon1ImageBuffer = await sharp(`/pokemons/back/${pokemon1Id}.png`) //show back of the pokemon
+      const pokemon1ImageBuffer = await sharp(`./public/images/pokemons/back/${pokemon1Id}.png`) //show back of the pokemon
         .resize(280, 280)
         .png()
         .toBuffer();
   
-      const pokemon2ImageBuffer = await sharp(`/pokemons/${pokemon2Id}.png`)
+      const pokemon2ImageBuffer = await sharp(`./public/images/pokemons/${pokemon2Id}.png`)
         .resize(200, 200)
         .png()
         .toBuffer();
@@ -136,11 +136,11 @@ export const generateFight = async (
      })
 
     const fightComponentsArray = fightComponents();
-    const baseImageBuffer = await sharp('/battle-fight.png')
+    const baseImageBuffer = await sharp('./public/images/battle-fight.png')
     .resize(600, 600)
     .png()
     .toBuffer();
-    const pokemon1ImageBuffer = await sharp(`/pokemons/${pokemonId}.png`)
+    const pokemon1ImageBuffer = await sharp(`./public/images/pokemons/${pokemonId}.png`)
     .resize(108, 108)
     .png()
     .toBuffer();
@@ -164,22 +164,22 @@ export const generateBattleConfirm = async (
   try {
   const ComponentsArray = [];
   
-  const baseImageBuffer = await sharp('/battle-checkout.png')
+  const baseImageBuffer = await sharp('./public/images/battle-checkout.png')
   .resize(600, 600)
   .png()
   .toBuffer();
 
-  const pokemon1ImageBuffer = await sharp(`/pokemons/${pokemonIds[0]}.png`)
+  const pokemon1ImageBuffer = await sharp(`./public/images/pokemons/${pokemonIds[0]}.png`)
   .resize(125, 125)
   .png()
   .toBuffer();
 
-  const pokemon2ImageBuffer = await sharp(`/pokemons/${pokemonIds[1]}.png`)
+  const pokemon2ImageBuffer = await sharp(`./public/images/pokemons/${pokemonIds[1]}.png`)
   .resize(125, 125)
   .png()
   .toBuffer();
 
-  const pokemon3ImageBuffer = await sharp(`/pokemons/${pokemonIds[2]}.png`)
+  const pokemon3ImageBuffer = await sharp(`./public/images/pokemons/${pokemonIds[2]}.png`)
   .resize(125, 125)
   .png()
   .toBuffer();
@@ -205,12 +205,12 @@ export const generateWaitingRoom = async (
   try {
   const ComponentsArray = [];
   
-  const baseImageBuffer = await sharp('/waiting-room.png')
+  const baseImageBuffer = await sharp('./public/images/waiting-room.png')
   .resize(600, 600)
   .png()
   .toBuffer();
 
-  const usr1ImageBuffer = await sharp('/pokemons/25.png')
+  const usr1ImageBuffer = await sharp('./public/images/pokemons/25.png')
   .resize(170, 170)
   .png()
   .toBuffer();
@@ -245,22 +245,22 @@ export const generatePokemonCard = async (
   try {
   const ComponentsArray = [];
   
-  const baseImageBuffer = await sharp('/pokemons-base.png')
+  const baseImageBuffer = await sharp('./public/images/pokemons-base.png')
   .resize(600, 600)
   .png()
   .toBuffer();
 
-  const usr1ImageBuffer = await sharp(`/pokemons/${pokemonId}.png`)
+  const usr1ImageBuffer = await sharp(`./public/images/pokemons/${pokemonId}.png`)
   .resize(300, 300)
   .png()
   .toBuffer();
 
-  const usr2ImageBuffer = await sharp(`/pokemons/icons/${pokemonId-1}.png`)
+  const usr2ImageBuffer = await sharp(`./public/images/pokemons/icons/${pokemonId-1}.png`)
   .resize(100, 100)
   .png()
   .toBuffer();
 
-  const usr3ImageBuffer = await sharp(`/pokemons/icons/${pokemonId+1}.png`)
+  const usr3ImageBuffer = await sharp(`./public/images/pokemons/icons/${pokemonId+1}.png`)
   .resize(100, 100)
   .png()
   .toBuffer();
@@ -376,17 +376,17 @@ export const generatePokemonMenu = async (
    })
 
   const fightComponentsArray = fightComponents();
-  const baseImageBuffer = await sharp('/in-battle-change-pokemon.png')
+  const baseImageBuffer = await sharp('./public/images/in-battle-change-pokemon.png')
   .resize(600, 600)
   .png()
   .toBuffer();
 
-  const pokemon1ImageBuffer = await sharp(`/pokemons/${pokemonId1}.png`)
+  const pokemon1ImageBuffer = await sharp(`./public/images/pokemons/${pokemonId1}.png`)
   .resize(108, 108)
   .png()
   .toBuffer();
 
-  const pokemon2ImageBuffer = await sharp(`/pokemons/${pokemonId2}.png`)
+  const pokemon2ImageBuffer = await sharp(`./public/images/pokemons/${pokemonId2}.png`)
   .resize(108, 108)
   .png()
   .toBuffer();
