@@ -6,7 +6,7 @@ import { devtools } from 'frog/dev';
 import { handle } from 'frog/vercel';
 import { serve } from '@hono/node-server';
 import { assignPokemonToUser, createBattle, getBattleById, getPokemonName, getPokemonsByPlayerId, joinBattle, setSelectedPokemons, makeMove, forfeitBattle } from '../lib/database.js';
-import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, CHAIN_ID, CONTRACT_ADDRESS, POKEMON_CONTRACT_ADDRESS } from '../config.js';
+import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, CHAIN_ID, CONTRACT_ADDRESS, POKEMON_CONTRACT_ADDRESS, BATTLE_CONTRACT_ADDRESS } from '../config.js';
 import { boundIndex } from '../lib/utils/boundIndex.js';
 import { generateGame, generateFight, generateBattleConfirm, generateWaitingRoom, generatePokemonCard, generatePokemonMenu } from '../image-generation/generators.js';
 import { getPlayers, verifyMakerOrTaker } from '../lib/utils/battleUtils.js';
@@ -855,13 +855,14 @@ app.transaction('/create-battle', (c) => {
     "stateMutability": "nonpayable"
   }];
 
+  console.log("state", c.previousState.selectedPokemons);
+
   return c.contract({
     abi,
     functionName: 'createBattle',
-    args: [parseEther('0.000777'), c.previousState.selectedPokemons],
+    args: [5n, [1n, 2n, 3n]],
     chainId: CHAIN_ID,
-    to: CONTRACT_ADDRESS,
-    value: parseEther("0")
+    to: BATTLE_CONTRACT_ADDRESS
   });
 
 
