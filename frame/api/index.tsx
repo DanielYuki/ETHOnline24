@@ -10,6 +10,7 @@ import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, 
 import { boundIndex } from '../lib/utils/boundIndex.js';
 import { generateGame, generateFight, generateBattleConfirm, generateWaitingRoom, generatePokemonCard, generatePokemonMenu } from '../image-generation/generators.js';
 import { getPlayers, verifyMakerOrTaker } from '../lib/utils/battleUtils.js';
+import { handleFrameLog } from '../lib/utils/handleFrameLog.js';
 import { validateFramesPost } from '@xmtp/frames-validator';
 import { Context, Next } from 'hono';
 import { getPokemonTypeColor } from '../image-generation/pkmTypeColor.js';
@@ -609,6 +610,25 @@ app.frame('/battle/:gameId/pokemon/:enemyFid', async (c) => {
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}/pokemon`}>↩️</Button>
+    ]
+  })
+});
+
+// TODO implement battle log (IMAGE GENERATION)
+app.frame('/battle/:gameId/battlelog', async (c) => {
+  const gameId = c.req.param('gameId') as string;
+  const battle: any = await getBattleById(Number(gameId));
+
+  const battleLog = battle.battle_log;
+
+  console.log(handleFrameLog(battleLog, battle.current_turn));
+
+  return c.res({
+    title,
+    image: '/battle-fight.png',
+    imageAspectRatio: '1:1',
+    intents: [
+      <Button action={`/battle/${gameId}`}>↩️</Button>
     ]
   })
 });
