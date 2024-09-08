@@ -72,6 +72,14 @@ export const pokemonsByPlayerId = async (req, res) => {
       return res.status(500).json({ message: 'Error getting inventory', error: err.message });
     }
 
+    if(!row) {
+      return res.status(404).json({ message: 'Player not found' });
+    }
+
+    if(!row.inventory) {
+      return res.status(404).json({ message: 'Player has no pokemons' });
+    }
+
     const inventory = row.inventory;
 
     res.status(200).json({inventory});
@@ -293,8 +301,9 @@ export const makeMove = async (req, res) => {
     }
 
     updateMove(battle, userFid, move);
-
+    
     if (bothPlayersMoved(battle)) {
+      battle.battle_log.push(`Turn ${++battle.current_turn}`);
       console.log('performing battle...');
       performBattle(battle);
     }
