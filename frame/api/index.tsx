@@ -1001,7 +1001,7 @@ app.hono.get('/image/pokemon/:id/:name', async (c) => {
   try {
     const id = Number(c.req.param('id'));
     const name = c.req.param('name')
-    const image = await generatePokemonCard(id, name)
+    const image = await generatePokemonCard(id, name, 70, 20, 51) //review this later
 
     return c.newResponse(image, 200, {
       'Content-Type': 'image/png',
