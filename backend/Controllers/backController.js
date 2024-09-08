@@ -80,12 +80,13 @@ export const pokemonsByPlayerId = async (req, res) => {
 
 export const getBattleIdByStatus = async (req, res) => {
   const { status } = req.params;
-  db.get('SELECT * FROM battles WHERE status = ?', [status], (err, col) => {
+  db.all('SELECT * FROM battles WHERE status = ?', [status], (err, col) => {
     if (err) {
       return res.status(500).json({ message: 'Error getting ids', error: err.message });
     }
-    const battles = col.id;
-    res.status(200).json({battles});
+    const battles = col;
+    const battleIds = battles.map(battle => battle.id);
+    res.status(200).json(battleIds);
   })
 }
 
