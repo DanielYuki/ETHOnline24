@@ -1,6 +1,8 @@
 import sharp from "sharp";
 import { Attack } from "../types/types";
-import { attackType, hpHp, hpSVG, moves, moves2, pokemonSVG, statusPokemon, typeBox, typeBox2 } from "./functions.js";
+
+import { attackType, hpHp, hpSVG, moves, moves2, pokemonSVG, statsBox1, statsBox2, statusPokemon, typeBox, typeBox2 } from "./functions";
+ 
 
 export const generateGame = async (
     pokemon1Name: string,
@@ -21,19 +23,27 @@ export const generateGame = async (
   
         const hp1SVG = hpSVG(currentHp1, totalHP1);
         const hp2SVG = hpSVG(currentHp2, totalHP2);
-  
-        components.push({ input: Buffer.from(hp1SVG), top: 496, left: 351 });
-        components.push({ input: Buffer.from(hp2SVG), top: 104, left: 53 });
+        const box1 = statsBox1();
+        const box2 = statsBox2();
+        
+        components.push({ input: Buffer.from(box1), top: 40, left: 0 });
+        components.push({ input: Buffer.from(box2), top: 238, left: 380 });
+        components.push({ input: Buffer.from(hp1SVG), top: 272, left: 420 });
+        components.push({ input: Buffer.from(hp2SVG), top: 75, left: 10 });
         const pokemon1SVG = pokemonSVG(pokemon1Name);
         const pokemon2SVG = pokemonSVG(pokemon2Name);
-        components.push({ input: Buffer.from(pokemon1SVG), top: 455, left: 351 });
-        components.push({ input: Buffer.from(pokemon2SVG), top: 59, left: 53 });
+        components.push({ input: Buffer.from(pokemon1SVG), top: 235, left: 420 });
+        components.push({ input: Buffer.from(pokemon2SVG), top: 40, left: 10 });
   
         return components;
       })
-  
-      const baseImageBuffer = await sharp('./public/battle-playground.png')
-        .resize(600, 600)
+      const baseImageBuffer = await sharp('./public/battle-scenes/1.png')
+      .resize(630, 379)
+      .png()
+      .toBuffer();
+
+      const battleImageBuffer = await sharp('./public/battle-scenes/1.png')
+        .resize(630, 379)
         .png()
         .toBuffer();
   
@@ -50,10 +60,13 @@ export const generateGame = async (
         .toBuffer();
   
       const hphp = hpHp(currentHp1, totalHP1);
-      gameComponentsArray.push({ input: pokemon1ImageBuffer, top: 350, left: 50 });
-      gameComponentsArray.push({ input: pokemon2ImageBuffer, top: 50, left: 350 });
-      gameComponentsArray.push({ input: Buffer.from(hphp), top: 524, left: 484 });
+      gameComponentsArray.push({ input: pokemon1ImageBuffer, top: 151, left: 77 });
+      gameComponentsArray.push({ input: pokemon2ImageBuffer, top: 30, left: 400 });
+      gameComponentsArray.push({ input: Buffer.from(hphp), top: 295, left: 553 });
+      const battleBg = [];
+      battleBg.push({input: battleImageBuffer, top:0, left: 44});
       const finalImage = await sharp(baseImageBuffer)
+        .composite(battleBg)
         .composite(gameComponentsArray)
         .png()
         .toBuffer();

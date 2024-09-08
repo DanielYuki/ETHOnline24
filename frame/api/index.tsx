@@ -793,13 +793,36 @@ app.frame('/share/:pokemonId', (c) => {
 app.frame('/test', (c) => {
   return c.res({
     title,
-    image: `/image/pokemenu`,
-    imageAspectRatio: '1:1',
+    image: `/image/vs/test`,
+    imageAspectRatio: '1.91:1',
     intents: [
       <Button action={`/`}>TRY IT OUT 🏠</Button>,
     ],
   })
 })
+
+app.hono.get('/image/vs/test', async (c) => {
+  try {
+    const image = await generateGame(
+      'charizard',
+      6,
+      'pikachu',
+      25,
+      70,
+      70,
+      60,
+      60,
+    );
+
+    return c.newResponse(image, 200, {
+      'Content-Type': 'image/png',
+      'Cache-Control': 'max-age=0', //try no-cache later
+    });
+  } catch (error) {
+    console.error("Error generating image:", error);
+    return c.newResponse("Error generating image", 500);
+  }
+});
 
 app.hono.get('/image/vs/:gameId/user/:userFid', async (c) => {
   const battle: any = await getBattleById(Number(c.req.param('gameId')));
