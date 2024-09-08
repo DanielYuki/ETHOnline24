@@ -94,8 +94,15 @@ export class Move {
     battle.battle_log.push(`${attacker.name} hit ${hits} times!`);
   }
 
-  swapMove(owner, battle) {
-    this.onExecute(owner, battle);
+  swapMove(agent, battle) {
+    const agentPokemons = agent == 'maker' ? battle.maker_pokemons : battle.taker_pokemons;
+    const agentBattlingPokemons = agent == 'maker' ? battle.maker_battling_pokemons : battle.taker_battling_pokemons;
+
+    const temp = agentBattlingPokemons[0];
+    agentBattlingPokemons[0] = agentBattlingPokemons[1];
+    agentBattlingPokemons[1] = temp;
+
+    battle.battle_log.push(`${agentPokemons[agentBattlingPokemons[0]].name} and ${agentPokemons[agentBattlingPokemons[1]].name} swapped places!`);
   }
 
   statsMultiplier(pokemon, stat, amount, battle) {

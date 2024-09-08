@@ -11,6 +11,7 @@ router.post('/join-battle', joinBattle);
 router.post('/make-move', makeMove);
 router.post('/select-pokemons', selectPokemons);
 router.post('/register-converse-user', registerConverseWallet);
+router.post('/forfeit-battle', forfeitBattle);
 router.get('/converse-user/:wallet', retrieveFidFromConverseWallet);
 router.get('/battle/:id', getBattleById);
 router.get('/user/:id/pokemons', pokemonsByPlayerId);
