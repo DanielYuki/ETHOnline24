@@ -433,7 +433,7 @@ app.frame('/battle/:gameId', async (c) => {
   return c.res({
     title,
     image: `/image/vs/${gameId}/user/${fid}`,
-    imageAspectRatio: '1:1',
+    imageAspectRatio: '1.91:1',
     intents: [
       <Button action={`/battle/${gameId}/fight`}>FIGHT⚔️</Button>,
       <Button action={`/battle/${gameId}/pokemon`}>POKEMON</Button>,

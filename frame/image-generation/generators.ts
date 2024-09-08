@@ -1,7 +1,7 @@
 import sharp from "sharp";
-import { Attack } from "../types/types";
+import { Attack } from "../types/types.js";
 
-import { attackType, hpHp, hpSVG, moves, moves2, pokemonSVG, statsBox1, statsBox2, statusPokemon, typeBox, typeBox2 } from "./functions";
+import { attackType, hpHp, hpSVG, moves, moves2, pokemonSVG, statsBox1, statsBox2, statusPokemon, typeBox, typeBox2 } from "./functions.js";
  
 
 export const generateGame = async (
