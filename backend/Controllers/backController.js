@@ -131,6 +131,46 @@ export const createBattle = async (req, res) => {
   }
 };
 
+export const forfeitBattle = async (req, res) => {
+  try {
+    const { battleId, userFid } = req.body;
+
+    console.log('Received forfeit request', req.body);
+
+    const row = await getBattleFromDb(battleId);
+    if (!row) return res.status(404).json({ message: 'Battle not found' });
+
+    const battle = createBattleInstance(row);
+
+    if (!isUserPartOfBattle(battle, userFid)) {
+      return res.status(400).json({ message: 'User is not part of the battle' });
+    }
+
+    if (battle.status === 'ended') {
+      return res.status(400).json({ message: 'Battle has already ended' });
+    }
+
+    battle.status = 'ended';
+
+    const agent = battle.maker === userFid ? 'maker' : 'taker';
+    const otherAgent = agent === 'maker' ? 'taker' : 'maker';
+
+    battle.battle_log.push(`${agent} forfeited the battle`);
+    battle.battle_log.push(`${otherAgent} wins!`);
+
+    console.log(`${agent} forfeited the battle`);
+
+    await updateBattleInDatabase(battle);
+
+    await registerBattleLog(battle);
+
+    res.status(200).json({ message: 'Battle ended', battle });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred' });
+  }
+}
+
 export const getBattleById = async (req, res) => {
   try {
     const { id } = req.params;
