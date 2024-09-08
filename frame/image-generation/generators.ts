@@ -1,6 +1,8 @@
 import sharp from "sharp";
 import { Attack } from "../types/types";
+
 import { attackType, hpHp, hpSVG, moves, moves2, pokemonSVG, statsBox1, statsBox2, statusPokemon, typeBox, typeBox2 } from "./functions";
+ 
 
 export const generateGame = async (
     pokemon1Name: string,
@@ -47,7 +49,7 @@ export const generateGame = async (
   
       const gameComponentsArray = gameComponents();
   
-      const pokemon1ImageBuffer = await sharp(`./public/pokemons/${pokemon1Id}.png`)
+      const pokemon1ImageBuffer = await sharp(`./public/pokemons/back/${pokemon1Id}.png`) //show back of the pokemon
         .resize(200, 200)
         .png()
         .toBuffer();
