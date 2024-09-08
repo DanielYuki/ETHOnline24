@@ -830,7 +830,30 @@ app.transaction('/mint', (c) => {
 
 app.transaction('/create-battle', (c) => {
 
-  const abi = ["function createBattle(uint256 _amountToBet, uint256[] memory _pokemons) public returns (uint256)"];
+  const abi = [{
+    "type": "function",
+    "name": "createBattle",
+    "inputs": [
+        {
+            "name": "_amountToBet",
+            "type": "uint256",
+            "internalType": "uint256"
+        },
+        {
+            "name": "_pokemons",
+            "type": "uint256[]",
+            "internalType": "uint256[]"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "",
+            "type": "uint256",
+            "internalType": "uint256"
+        }
+    ],
+    "stateMutability": "nonpayable"
+  }];
 
   return c.contract({
     abi,
