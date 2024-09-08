@@ -9,6 +9,8 @@ contract PokemonSource is ERC721, Ownable {
 
     uint256 public counter;
 
+    mapping(uint256 => string) public pokemonToName;
+
     mapping(uint256 => uint256) public pokemonToHpMax;
     mapping(uint256 => uint256) public pokemonToHpMin;
     mapping(uint256 => uint256) public pokemonToAttackMax;
@@ -18,8 +20,10 @@ contract PokemonSource is ERC721, Ownable {
     mapping(uint256 => uint256) public pokemonToSpeedMax;
     mapping(uint256 => uint256) public pokemonToSpeedMin;
 
-    mapping(uint256 => string[]) public pokemonToPossibleTypes;
+    mapping(uint256 => string[]) public pokemonToTypes;
     mapping(uint256 => uint256[]) public pokemonToPossibleMoves;
+
+    
     
 
     constructor(address _owner)  Ownable(_owner) ERC721("PokemonSource", "PS"){
@@ -27,6 +31,7 @@ contract PokemonSource is ERC721, Ownable {
     }
 
     function createPokemonSource(
+        string memory _name,
         uint256 _hpMax,
         uint256 _hpMin,
         uint256 _attackMax,
@@ -35,10 +40,11 @@ contract PokemonSource is ERC721, Ownable {
         uint256 _defenseMin,
         uint256 _speedMax,
         uint256 _speedMin,
-        string[] memory _possibleTypes,
+        string[] memory _types,
         uint256[] memory _possibleMoves
     ) public onlyOwner {
         counter++;
+        pokemonToName[counter] = _name;
         pokemonToHpMax[counter] = _hpMax;
         pokemonToHpMin[counter] = _hpMin;
         pokemonToAttackMax[counter] = _attackMax;
@@ -47,15 +53,10 @@ contract PokemonSource is ERC721, Ownable {
         pokemonToDefenseMin[counter] = _defenseMin;
         pokemonToSpeedMax[counter] = _speedMax;
         pokemonToSpeedMin[counter] = _speedMin;
-        pokemonToPossibleTypes[counter] = _possibleTypes;
+        pokemonToTypes[counter] = _types;
         pokemonToPossibleMoves[counter] = _possibleMoves;
 
         _mint(address(this), counter);
-    }
-
-
-    function getRandomPokemonId() public view returns (uint256) {
-        
     }
 
 }
