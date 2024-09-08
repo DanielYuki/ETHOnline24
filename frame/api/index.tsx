@@ -5,7 +5,7 @@ import { publicClient } from '../lib/contracts.js';
 import { devtools } from 'frog/dev';
 import { handle } from 'frog/vercel';
 import { serve } from '@hono/node-server';
-import { assignPokemonToUser, createBattle, getBattleById, getPokemonName, getPokemonsByPlayerId, joinBattle, setSelectedPokemons, makeMove } from '../lib/database.js';
+import { assignPokemonToUser, createBattle, getBattleById, getPokemonName, getPokemonsByPlayerId, joinBattle, setSelectedPokemons, makeMove, forfeitBattle } from '../lib/database.js';
 import { SHARE_INTENT, SHARE_TEXT, SHARE_EMBEDS, FRAME_URL, SHARE_GACHA, title, CHAIN_ID, CONTRACT_ADDRESS } from '../config.js';
 import { boundIndex } from '../lib/utils/boundIndex.js';
 import { generateGame, generateFight, generateBattleConfirm, generateWaitingRoom, generatePokemonCard, generatePokemonMenu } from '../image-generation/generators.js';
@@ -104,7 +104,7 @@ app.frame('/verify', async (c) => {
     image: '/welcome.png',
     imageAspectRatio: '1:1',
     intents: [
-      <Button action={`/battle`}>BATTLE 🔴</Button>,
+      <Button action={`/battle`}>BATTLE ⚔️</Button>,
       <Button action={`/pokedex/0`}>POKEDEX 📱</Button>,
     ],
   })
@@ -119,6 +119,7 @@ app.frame('/battle', async (c) => {
   // set isMaker to true
   c.deriveState((prevState: any) => {
     prevState.isMaker = true;
+    prevState.selectedPokemons = [];
   });
 
   return c.res({
@@ -127,7 +128,7 @@ app.frame('/battle', async (c) => {
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/pokemons/0/0`}>POKEMONS</Button>,
-      <Button action={`/verify`}>BACK</Button>,
+      <Button action={`/verify`}>↩️</Button>,
     ],
   })
 })
@@ -169,7 +170,7 @@ app.frame('/pokemons/:position/:index', async (c) => {
         image: `/image/checkout/${selectedPokemons[0]}/${selectedPokemons[1]}/${selectedPokemons[2]}`,
         imageAspectRatio: '1:1',
         intents: [
-          <Button.Transaction action={`${isMaker ? '/battle/handle' : `/battle/${joinableBattleId}/join`}`} target={`${isMaker ? '/create-battle' : '/join-battle'}`}>✅</Button.Transaction>,
+          <Button.Transaction action={`${isMaker ? '/battle/handle' : `/battle/${joinableBattleId}/join`}`} target={`${isMaker ? '/create-battle' : '/join-battle'}`}>CREATE BATTLE</Button.Transaction>,
           <Button action={`/battle`}>↩️</Button>,
         ],
       })
@@ -291,7 +292,7 @@ app.frame('/finish-battle-create', async (c) => {
     imageAspectRatio: '1:1',
     intents: [
       <Button.Link href={`${SHARE_INTENT}/${SHARE_TEXT}/${SHARE_EMBEDS}/${FRAME_URL}/battle/share/${newBattleId}`}>SHARE</Button.Link>,
-      <Button action={`/battle/${newBattleId}`}>BATTLE!</Button>,
+      <Button action={`/battle/${newBattleId}`}>BATTLE⚔️</Button>,
     ],
   })
 })
@@ -381,7 +382,7 @@ app.frame('/finish-battle-join', async (c) => {
     image: `/go!.png`,
     imageAspectRatio: '1:1',
     intents: [
-      <Button action={`/battle/${gameId}`}>BATTLE!</Button>,
+      <Button action={`/battle/${gameId}`}>BATTLE⚔️</Button>,
     ],
   })
 })
@@ -434,9 +435,10 @@ app.frame('/battle/:gameId', async (c) => {
     image: `/image/vs/${gameId}/user/${fid}`,
     imageAspectRatio: '1:1',
     intents: [
-      <Button action={`/battle/${gameId}/fight`}>FIGHT</Button>,
+      <Button action={`/battle/${gameId}/fight`}>FIGHT⚔️</Button>,
       <Button action={`/battle/${gameId}/pokemon`}>POKEMON</Button>,
-      <Button action={`/battle/${gameId}/run`}>RUN</Button>
+      <Button action={`/battle/${gameId}/battlelog`}>LOG📜</Button>,
+      <Button action={`/battle/${gameId}/run`}>RUN🏳️</Button>
     ]
   })
 });
@@ -530,7 +532,8 @@ app.frame('/battle/:gameId/waiting/:value', async (c) => {
   if (!hasMoved) {
     const battle: any = await getBattleById(gameId)
     const { player } = getPlayers(fid!, battle);
-    await makeMove(gameId, fid!, player.currentPokemon.moves[value - 1]);
+
+    await makeMove(gameId, fid!, value ? player.currentPokemon.moves[value - 1]:0);
 
     c.deriveState((prevState: any) => {
       prevState.hasMoved = true;
@@ -576,14 +579,36 @@ app.frame('/battle/:gameId/pokemon', async (c) => {
   const fid = frameData?.fid;
   const gameId = c.req.param('gameId') as string;
 
+  const battle: any = await getBattleById(Number(gameId));
+  const { player, opponent } = getPlayers(fid!, battle);
+
+  const activePokemon = player.battling_pokemons;
+
   return c.res({
     title,
     image: `/image/pokemenu/${gameId}/user/${fid}`,
     imageAspectRatio: '1:1',
     intents: [
-      <Button action={`/battle/${gameId}`}>🔄️</Button>,
-      // <Button action={`/battle/${gameId}`}>ENEMY 🔎</Button>,
+      ...(activePokemon.length > 1
+        ? [<Button value='0' action={`/battle/${gameId}/confirm`}>SWAP🔄️</Button>]
+        : []),
+      <Button action={`/battle/${gameId}/pokemon/${opponent.id}`}>ENEMY🔎</Button>,
       <Button action={`/battle/${gameId}`}>↩️</Button>
+    ]
+  })
+});
+
+// fully implement enemy scout screen
+app.frame('/battle/:gameId/pokemon/:enemyFid', async (c) => {
+  const gameId = c.req.param('gameId') as string;
+  const enemyFid = c.req.param('enemyFid') as string;
+
+  return c.res({
+    title,
+    image: `/image/pokemenu/${gameId}/user/${enemyFid}`,
+    imageAspectRatio: '1:1',
+    intents: [
+      <Button action={`/battle/${gameId}/pokemon`}>↩️</Button>
     ]
   })
 });
@@ -597,7 +622,24 @@ app.frame('/battle/:gameId/run', async (c) => {
     imageAspectRatio: '1:1',
     intents: [
       <Button action={`/battle/${gameId}`}>NO</Button>,
-      <Button action={`/battle/${gameId}`}>YES</Button>,
+      <Button action={`/battle/${gameId}/forfeit`}>YES</Button>,
+    ]
+  })
+});
+
+app.frame('/battle/:gameId/forfeit', async (c) => {
+  const gameId = c.req.param('gameId') as any;
+  const { frameData } = c;
+  const fid = frameData?.fid;
+
+  await forfeitBattle(gameId, fid!);
+
+  return c.res({
+    title,
+    image: '/loser.png',
+    imageAspectRatio: '1:1',
+    intents: [
+      <Button.Reset>PLAY AGAIN 🔄️</Button.Reset>,
     ]
   })
 });
@@ -605,8 +647,6 @@ app.frame('/battle/:gameId/run', async (c) => {
 app.frame('/pokedex/:position', async (c) => {
   const { frameData } = c;
   const fid = frameData?.fid;
-
-  console.log(fid);
 
   const playerPokemons = await getPokemonsByPlayerId(fid!);
   const totalPlayerPokemons = playerPokemons.length;
@@ -624,7 +664,7 @@ app.frame('/pokedex/:position', async (c) => {
     intents: [
       <Button action={`/pokedex/${boundIndex(position - 1, totalPlayerPokemons)}`}>⬅️</Button>,
       <Button action={`/pokedex/${boundIndex(position + 1, totalPlayerPokemons)}`}>➡️</Button>,
-      <Button action={`/new`}>GOTCHA 🍀</Button>,
+      <Button action={`/new`}>NEW 🍀</Button>,
       <Button action={`/verify`}>↩️</Button>,
     ],
   })
@@ -844,9 +884,8 @@ app.hono.get('/image/pokemenu/:gameId/user/:userFid', async (c) => {
       attacks.push({ atk: move.name, type: { name: move.type, color: getPokemonTypeColor(move.type) } });
     })
 
-    console.log(attacks);
-
-    // const attacks = [{atk: 'Tackle', type: {name:'normal', color:'919191'}}, {atk: 'Thunderbolt', type: {name:'electric', color:'FFE500'}}, {atk: 'Light', type: {name:'normal', color:'000000'}}] as Attack[];
+    // console.log(attacks);
+    // review logic when theres only one battling pokemon left
     const image = await generatePokemonMenu(
       player.currentPokemon.name,
       player.currentPokemon.id,
