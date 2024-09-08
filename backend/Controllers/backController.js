@@ -7,6 +7,16 @@ import { bothPlayersMoved, createBattleInstance, getBattleFromDb, isUserPartOfBa
 import { moveset } from "../utils/moveset.js";
 import { MT19937 } from "../utils/MT19937.js";
 
+import { FhenixClient } from 'fhenixjs';
+import { JsonRpcProvider } from 'ethers';
+import { BattleFhenixAbi } from "../abis/BattleFhenix.js";
+
+// initialize your web3 provider
+const provider = new JsonRpcProvider('https://api.helium.fhenix.zone');
+
+// initialize Fhenix Client
+const client = new FhenixClient({provider});
+
 /* Essa função serve apenas para facilitar o mint de pokemons */
 export const sendTransaction = async (req, res) => {
   try {
@@ -131,6 +141,8 @@ export const createBattle = async (req, res) => {
       
       // Retorna a batalha com o ID
       res.status(200).json({ message: 'Battle created successfully', newBattle });
+
+      
     });
     
     insert.finalize();
@@ -229,6 +241,27 @@ export const joinBattle = async (req, res) => {
 
       res.status(200).json({ message: 'Battle joined successfully' });
     });
+
+    try{ 
+
+      const battleContract = new ethers.Contract(process.env.BATTLE_CONTRACT_ADDRESS, BattleFhenixAbi , localSigner);
+
+      const row = await getBattleFromDb(battleId);
+
+      const maker = row.maker;
+
+      battleContract.registerBattle(battleId, maker, taker);
+
+      
+
+      
+
+    } catch(err){
+      console.log(err);
+    }
+
+
+
   } catch (error) {
     console.log(error);
   }
