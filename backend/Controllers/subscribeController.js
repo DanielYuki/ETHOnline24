@@ -17,11 +17,9 @@ export const retrieveFidFromConverseUsername = (req, res) => {
   });
 }
 
-export const subscribe = (req, res) => {
+export const registerConverseUsername = (req, res) => {
+  const { username, fid } = req.body;
   
-}
-
-export const registerConverseUsername = (username, fid) => {
   db.run('INSERT OR REPLACE INTO converse (username, fid) VALUES (?, ?)', [username, fid], (err) => {
     if (err) {
       console.error('Error while registering converse username: ', err);
