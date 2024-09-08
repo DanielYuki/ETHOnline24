@@ -1,6 +1,6 @@
 import db from "../database.js";
 
-export const retrieveFidFromConverseUsername = (req, res) => {
+export const retrieveFidFromConverseWallet = (req, res) => {
   const { wallet } = req.params;
 
   db.get('SELECT fid FROM converse WHERE wallet = ?', [wallet], (err, row) => {
