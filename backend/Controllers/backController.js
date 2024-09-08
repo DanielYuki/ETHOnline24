@@ -72,6 +72,14 @@ export const pokemonsByPlayerId = async (req, res) => {
       return res.status(500).json({ message: 'Error getting inventory', error: err.message });
     }
 
+    if(!row) {
+      return res.status(404).json({ message: 'Player not found' });
+    }
+
+    if(!row.inventory) {
+      return res.status(404).json({ message: 'Player has no pokemons' });
+    }
+
     const inventory = row.inventory;
 
     res.status(200).json({inventory});
@@ -350,4 +358,40 @@ export const getPokemonName = async (req, res) => {
   const pokemon = pokemons[id-1];
 
   res.status(200).json({ name: pokemon.name });
+}
+
+export const getUserBattlesByFid = async (req, res) => {
+  const { fid } = req.params;
+
+  db.all('SELECT * FROM battles WHERE maker = ? OR taker = ?', [fid, fid], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error getting battles', error: err.message });
+    }
+
+    const battles = rows.map(row => row.id);
+
+    res.status(200).json({ battles });
+  })
+}
+
+export const getUserBattlesByWallet = async (req, res) => {
+  const { wallet } = req.params;
+
+  db.get('SELECT fid FROM converse WHERE wallet = ?', [wallet], (err, row) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error getting fid', error: err.message });
+    }
+
+    const fid = row.fid;
+
+    db.all('SELECT * FROM battles WHERE maker = ? OR taker = ?', [fid, fid], (err, rows) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error getting battles', error: err.message });
+      }
+
+      const battles = rows.map(row => row.id);
+
+      res.status(200).json({ battles });
+    })
+  });
 }
